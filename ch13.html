@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ১৩: তেজস্ক্রিয়তা ও ইলেকট্রনিক্স</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ১৩: তেজস্ক্রিয়তা ও ইলেকট্রনিক্স</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(13);
+
+sim({t:'পরমাণুর নিউক্লিয়াসের মডেল ও বিকিরণ (আলফা, বিটা, গামা)',c:[['t','সময় (সে)',0,10,0,1]],
+ f:(p,t)=>{const cx=300,cy=180;
+ ci(cx,cy,35,col.ac);tx('নিউক্লিয়াস',cx,cy+5,col.ink,'center');
+ const x1=cx+t*30, y1=cy-t*15; ci(x1,y1,6,'#ef4444'); tx('আলফা (α)',x1+15,y1,'#ef4444');
+ const x2=cx+t*45, y2=cy+t*10; ci(x2,y2,4,'#38bdf8'); tx('বিটা (β)',x2+15,y2,'#38bdf8');
+ tx('গামা (γ) তরঙ্গ',cx+t*50,cy+40,col.am);}});
+
+sim({t:'তেজস্ক্রিয় ক্ষয় ও অর্ধায়ুর গ্রাফ',c:[['h','অর্ধায়ু (বছর)',1,10,3,1]],
+ f:(p,t)=>{const H=p.h, T=Math.min(t%12,10), N=100*Math.pow(0.5, T/H);
+ ln(60,320,580,320,col.ink,1);ln(60,120,60,320,col.ink,1);
+ rc(60+T*50,320-N*2,8,N*2,col.ac);
+ tx('অবশিষ্ট পরমাণু N = '+N.toFixed(1)+'%',100,80,col.ac);
+ tx('সময় t = '+T.toFixed(1)+' বছর',100,110,col.ink);}});
+
+sim({t:'অ্যানালগ ও ডিজিটাল সংকেত',c:[['f','কম্পাঙ্ক',1,5,2,1]],
+ f:(p,t)=>{const cx=60,cy=180;
+ g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;
+ for(let x=0;x<500;x+=5) { let y=cy+Math.sin((x+t*20)*0.05)*40; g[x==0?'moveTo':'lineTo'](cx+x,y); }
+ g.stroke(); tx('অ্যানালগ সংকেত (Sine Wave)',60,110,col.ac);
+ 
+ g.beginPath();g.strokeStyle=col.am;g.lineWidth=2;
+ for(let x=0;x<500;x+=40) { let hi=(Math.floor((x+t*20)/40)%2===0); g.lineTo(cx+x,cy+100+(hi?-30:10)); g.lineTo(cx+x+40,cy+100+(hi?-30:10)); }
+ g.stroke(); tx('ডিজিটাল সংকেত (Square Wave)',60,240,col.am);}});
+
+sim({t:'ডায়োড ও সেমিকন্ডাক্টরের মডেল (P-N জাংশন)',c:[['v','বায়াস ভোল্টেজ (V)',-3,3,1,.5]],
+ f:(p,t)=>{const V=p.v;
+ rc(220,150,80,80,col.ac);rc(300,150,80,80,col.am);
+ tx('P-টাইপ',260,195,col.ink,'center');tx('N-টাইপ',340,195,col.ink,'center');
+ tx('ভোল্টেজ V = '+V+' V',100,80,col.ink);
+ tx(V>0?'ফরোয়ার্ড বায়াস (কারেন্ট প্রবাহিত হয়)':'রিভার্স বায়াস (কারেন্ট রোধ করে)',100,110,V>0?col.am:'#ef4444');}});
+</script></body></html>

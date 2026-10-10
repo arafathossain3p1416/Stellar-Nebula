@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ৭: তরঙ্গ ও শব্দ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ৭: তরঙ্গ ও শব্দ</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(7);
+const fc=(l,s)=>((l*s-30)%l+l)%l+30; // প্রথম শীর্ষের x
+
+sim({t:'অনুপ্রস্থ তরঙ্গ',c:[['A','বিস্তার (সেমি)',1,8,5,.5],['l','তরঙ্গদৈর্ঘ্য (সেমি)',6,30,16,1],['f','কম্পাঙ্ক (Hz)',.2,3,1,.1]],
+ f:(p,t)=>{const A=p.A*10,L=p.l*10,y=x=>190-A*Math.sin(2*PI*(x/L-p.f*t));ln(20,190,620,190,col.ln,1);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=3;for(let x=20;x<=620;x+=4)g[x>20?'lineTo':'moveTo'](x,y(x));g.stroke();
+ for(let x=20;x<=620;x+=30)ci(x,y(x),5,col.am);ln(320,190-A,320,190+A,col.ink,1,1);ci(320,y(320),9,col.ink);const c=fc(L,p.f*t+.25);if(c<600)tx('শীর্ষ',c,190-A-12,col.ink,'center');if(c+L/2<600)tx('পাদ',c+L/2,190+A+24,col.ink,'center');
+ tx('কণা ওপর-নিচে কাঁপে, তরঙ্গ ডানে এগোয় (কালো কণাটি দেখুন)',16,26,col.ac);tx('বেগ v = f × λ = '+(p.f*p.l).toFixed(1)+' সেমি/সে',16,52)}});
+
+sim({t:'অনুদৈর্ঘ্য তরঙ্গ',c:[['A','কম্পনের বিস্তার',2,12,8,1],['l','তরঙ্গদৈর্ঘ্য',100,300,160,10],['f','কম্পাঙ্ক (Hz)',.2,2,.8,.1]],
+ f:(p,t)=>{for(let r=0;r<5;r++)for(let i=0;i<40;i++){const x0=20+15*i,ph=2*PI*(x0/p.l-p.f*t);ci(x0+p.A*Math.sin(ph),110+r*36,5,i==20?col.ink:Math.cos(ph)<-.5?col.am:col.ac)}
+ const xc=fc(p.l,p.f*t+.5+(10/p.l)),e=Math.min(xc+p.l,620);ln(xc,310,e,310,col.ink,2);ln(xc,302,xc,318,col.ink,2);ln(e,302,e,318,col.ink,2);tx('λ (দুই সংনমনের দূরত্ব)',(xc+e)/2,336,col.ink,'center');
+ tx('কণা তরঙ্গের দিকেই সামনে-পিছনে কাঁপে (কালো কণাটি দেখুন)',16,26,col.ac);tx('হলুদ অংশ = সংনমন (ঘন), ফাঁকা অংশ = বিরলন',16,52)}});
+
+sim({t:'তরঙ্গদৈর্ঘ্য, বিস্তার ও কম্পাঙ্ক',c:[['A','বিস্তার',10,60,40,1],['l','তরঙ্গদৈর্ঘ্য',60,300,160,5],['f','কম্পাঙ্ক (Hz)',.2,2,1,.1]],
+ f:(p,t)=>{const Y=150,y=x=>Y-p.A*Math.sin(2*PI*(x/p.l-p.f*t)),X=s=>40+s*187,Y2=300,B=.9*p.A;ln(20,Y,620,Y,col.ln,1);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=3;for(let x=20;x<=620;x+=4)g[x>20?'lineTo':'moveTo'](x,y(x));g.stroke();
+ const c=fc(p.l,p.f*t+.25),e=Math.min(c+p.l,620);ln(c,Y-p.A-16,e,Y-p.A-16,col.ink,2);tx('λ',(c+e)/2,Y-p.A-24,col.ink,'center');ar(30,Y,30,Y-p.A,col.am);tx('A',40,Y-p.A/2+5,col.am);
+ ln(40,Y2,600,Y2,col.ln,1);g.beginPath();g.strokeStyle=col.am;g.lineWidth=3;for(let s=0;s<=3;s+=.02)g[s?'lineTo':'moveTo'](X(s),Y2-B*Math.sin(2*PI*p.f*s));g.stroke();
+ const T=1/p.f,s1=.25*T,s2=1.25*T;if(X(s2)<=600){ln(X(s1),Y2-B-14,X(s2),Y2-B-14,col.ink,2);tx('T',(X(s1)+X(s2))/2,Y2-B-20,col.ink,'center')}const s=t%3;ci(X(s),Y2-B*Math.sin(2*PI*p.f*s),6,col.ink);tx('সময় →',560,Y2+40);
+ tx('T = 1/f = '+T.toFixed(2)+' সে, f = '+p.f+' Hz, v = f × λ = '+(p.f*p.l).toFixed(0),16,22,col.ac)}});
+
+sim({t:'সরল দোলক',c:[['L','সুতার দৈর্ঘ্য (মি)',.5,3,1.5,.1],['gr','অভিকর্ষজ ত্বরণ g (মি/সে²)',1.6,24,9.8,.1],['m','ভর (কেজি)',1,10,3,1],['a','সর্বোচ্চ কোণ (°)',5,40,20,1]],dr:m=>({a:cl(Math.round(Math.atan2(Math.abs(m.x-320),m.y-40)*180/PI),5,40)}),
+ f:(p,t)=>{const T=2*PI*Math.sqrt(p.L/p.gr),th=p.a*PI/180*Math.cos(2*PI*t/T),Lp=p.L*100,bx=320+Lp*Math.sin(th),by=40+Lp*Math.cos(th);rc(260,36,120,4,col.ink);ln(320,40,320,40+Lp,col.ln,1,1);ln(320,40,bx,by,col.ink,2);ci(bx,by,10+p.m*2,col.ac);
+ tx('দোলনকাল T = 2π√(L/g) = '+T.toFixed(2)+' সে',16,26,col.ac);tx('পূর্ণ দোলন সংখ্যা = '+Math.floor(t/T),16,52);tx('ভর বদলালে T বদলায় না',16,78)}});
+
+sim({t:'প্রতিধ্বনি',c:[['d','দেয়ালের দূরত্ব (মি)',5,200,85,1],['v','শব্দের বেগ (মি/সে)',300,360,340,5]],
+ f:(p,t)=>{const te=2*p.d/p.v,k=.2,cyc=te/k+1,tau=Math.min(t%cyc,te/k)*k,wx=60+p.d*2.4,s=p.v*2.4*tau,fw=s<=p.d*2.4,x=fw?60+s:wx-(s-p.d*2.4),heard=tau>=te-1e-6;
+ rc(wx,100,16,200,col.ink);ci(60,200,12,heard?col.am:col.ac);g.lineWidth=3;g.beginPath();
+ if(!heard){if(fw){g.strokeStyle=col.am;g.arc(x-26,200,30,-.8,.8)}else{g.strokeStyle=col.ac;g.arc(x+26,200,30,PI-.8,PI+.8)}g.stroke()}
+ else tx('প্রতিধ্বনি শোনা গেল!',60,160,col.ac);
+ tx('প্রতিধ্বনির সময় t = 2d/v = '+te.toFixed(2)+' সে',16,26,col.ac);tx(te>=.1?'আলাদা প্রতিধ্বনি শোনা যাবে (ব্যবধান ≥ ০.১ সে)':'মূল শব্দের সাথে মিশে যাবে (ব্যবধান < ০.১ সে)',16,52);
+ tx('আলাদা শুনতে ন্যূনতম দূরত্ব ≈ '+(p.v*.05).toFixed(1)+' মি',16,78);tx('ছবিতে ৫ গুণ ধীরে দেখানো হচ্ছে',16,104)}});
+
+const MD=[['শূন্যস্থান',0],['বায়ু',340],['পানি',1500],['লোহা',5000]];
+sim({t:'শব্দের সঞ্চালন',c:[['md','মাধ্যম (০ = শূন্যস্থান, ১ = বায়ু, ২ = পানি, ৩ = লোহা)',0,3,1,1]],
+ f:(p,t)=>{const[nm,v]=MD[Math.round(p.md)],vp=v/4,tau=t%8,sx=80,sy=190,ex=560,sp=v==0?0:v<400?44:v<2000?26:14,ar_=(ex-sx)/vp,got=v>0&&tau>=ar_;
+ if(sp){g.globalAlpha=.35;for(let x=120;x<=520;x+=sp)for(let y=60;y<=330;y+=sp)ci(x,y,1.8,col.ink);g.globalAlpha=1}
+ if(v>0)for(let k=0;k<20;k++){const r=(tau-k*.5)*vp;if(r>0&&r<700){g.globalAlpha=Math.max(.1,1-r/600);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=3;g.arc(sx,sy,r,-1,1);g.stroke()}}g.globalAlpha=1;
+ ci(sx,sy,10,col.am);tx('উৎস',sx,sy+30,col.ink,'center');rc(ex-8,sy-30,16,60,got?col.am:col.ink);tx(got?'শব্দ পৌঁছেছে!':'শ্রোতা',ex,sy+52,col.ink,'center');
+ tx(nm+': শব্দের বেগ ≈ '+v+' মি/সে',16,26,col.ac);tx(v?'১ কিমি পথ যেতে সময় লাগে '+(1000/v).toFixed(2)+' সে':'শূন্যস্থানে শব্দ চলে না, চলতে মাধ্যম লাগে',16,52);tx('কণা কাছাকাছি থাকলে শব্দ দ্রুত চলে (কঠিন > তরল > গ্যাস)',16,78)}});
+</script></body></html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ৯: আলোর প্রতিসরণ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ৯: আলোর প্রতিসরণ</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(9);
+const drawLens=(X,Y,neg)=>{g.beginPath();g.strokeStyle=col.ink;g.lineWidth=3;if(!neg)g.ellipse(X,Y,12,95,0,0,7);else{g.moveTo(X-14,Y-95);g.quadraticCurveTo(X+4,Y,X-14,Y+95);g.moveTo(X+14,Y-95);g.quadraticCurveTo(X-4,Y,X+14,Y+95)}g.stroke()};
+
+sim({t:'আলোর প্রতিসরণের রশ্মিচিত্র',c:[['th','আপতন কোণ (°)',0,89,40,1],['n1','উপরের মাধ্যমের প্রতিসরাঙ্ক',1,2.4,1,.05],['n2','নিচের মাধ্যমের প্রতিসরাঙ্ক',1,2.4,1.5,.05]],
+ dr:m=>({th:Math.min(89,Math.round(Math.atan2(Math.abs(m.x-320),Math.max(190-m.y,1))*180/PI))}),
+ f:p=>{const i=p.th*PI/180,sr=p.n1*Math.sin(i)/p.n2,X=320,Y=190,L=170;g.globalAlpha=Math.min(.4,.1*p.n2);rc(0,Y,640,190,col.ac);g.globalAlpha=1;ln(X,20,X,360,col.ln,1,1);ln(0,Y,640,Y,col.ink,2);
+ ar(X-L*Math.sin(i),Y-L*Math.cos(i),X,Y,col.am);g.globalAlpha=sr<=1?.3:1;ln(X,Y,X+L*Math.sin(i),Y-L*Math.cos(i),col.ink,2);g.globalAlpha=1;
+ tx('আপতন কোণ i = '+p.th+'°',16,26);if(sr<=1){const r=Math.asin(sr);ar(X,Y,X+L*sr,Y+L*Math.cos(r),col.ac);tx('প্রতিসরণ কোণ r = '+(r*180/PI).toFixed(1)+'°',16,52,col.ac);tx(p.n2>p.n1?'ঘন মাধ্যমে ঢুকে রশ্মি অভিলম্বের দিকে বেঁকেছে':p.n2<p.n1?'হালকা মাধ্যমে রশ্মি অভিলম্ব থেকে দূরে বেঁকেছে':'প্রতিসরাঙ্ক সমান, রশ্মি সোজা চলে',16,78)}else tx('পূর্ণ অভ্যন্তরীণ প্রতিফলন হয়েছে',16,52,col.ac)}});
+
+const lens=neg=>({c:[['f','ফোকাস দূরত্ব',40,150,neg?80:90,5],['u','বস্তুর দূরত্ব',30,290,neg?150:200,1]],dr:m=>({u:cl(Math.round(320-m.x),30,290)}),
+ f:p=>{const X=320,Y=200,h=40,F=neg?-p.f:p.f,u=Math.abs(p.u-F)<4?F+4:p.u,v=1/(1/F-1/u),Xo=X-u,Xi=X+v,yi=Y+h*v/u,real=v>0;ln(10,Y,630,Y,col.ln,1);drawLens(X,Y,neg);
+ [[-1,'F₁','C₁'],[1,'F₂','C₂']].forEach(([sg,a,c])=>{ci(X+sg*p.f,Y,4,col.am);tx(a,X+sg*p.f,Y+22,col.ink,'center');ci(X+sg*2*p.f,Y,6,col.ac);tx(c,X+sg*2*p.f,Y+24,col.ac,'center')});ci(X,Y,3,col.ink);tx('O',X+10,Y+20);ar(Xo,Y,Xo,Y-h,col.am);ln(Xo,Y-h,X,Y-h,col.am);ln(Xo,Y-h,X,Y,col.am);
+ for(const y0 of[Y-h,Y]){if(real)ln(X,y0,Xi,yi,col.ac);else{ln(X,y0,Xi,yi,col.ac,1.5,1);const k=(630-X)/(X-Xi);ln(X,y0,630,y0+k*(y0-yi),col.ac)}}
+ if(Xi>0&&Xi<640)ar(Xi,Y,Xi,yi,col.ink);const uu=p.u,f=p.f,e=3,sz=Math.abs(v/u),atF=!neg&&Math.abs(uu-f)<=e,
+ Z=neg?'লেন্সের সামনে যেকোনো স্থানে':uu>2*f+e?'C₁ এর বাইরে':Math.abs(uu-2*f)<=e?'C₁ বিন্দুতে':uu>f+e?'F₁ ও C₁ এর মাঝে':atF?'F₁ বিন্দুতে':'F₁ ও O এর মাঝে',
+ IP=neg?'বস্তুর দিকেই, F₁ ও O এর মাঝে':uu>2*f+e?'অপর পাশে, F₂ ও C₂ এর মাঝে':Math.abs(uu-2*f)<=e?'অপর পাশে, C₂ বিন্দুতে':uu>f+e?'অপর পাশে, C₂ এর বাইরে':atF?'অসীম দূরে':'বস্তুর দিকেই, বস্তুর চেয়ে দূরে';
+ tx('বস্তু আছে: '+Z,16,26);tx('প্রতিবিম্ব হবে: '+IP,16,52,col.ac);tx(atF?'প্রতিবিম্ব: অত্যন্ত বড়, স্পষ্ট প্রতিবিম্ব গঠিত হয় না':'প্রকৃতি: '+(real?'বাস্তব ও উল্টো':'অবাস্তব ও সোজা')+', '+(sz<.95?'ছোট':sz>1.05?'বড়':'সমান আকারের'),16,78,col.ac);tx('বিবর্ধন '+sz.toFixed(2)+' গুণ',16,104)}});
+sim({t:'উত্তল লেন্সে প্রতিবিম্ব গঠন',...lens(0)});
+sim({t:'অবতল লেন্সে প্রতিবিম্ব গঠন',...lens(1)});
+
+sim({t:'প্রিজমে আলোর বিচ্ছুরণ',c:[['i','আপতন কোণ (°)',25,60,40,1],['n','গড় প্রতিসরাঙ্ক',1.4,1.8,1.55,.01],['ds','বিচ্ছুরণের মাত্রা',0,.15,.06,.01]],
+ f:p=>{const A=PI/3,i=p.i*PI/180,P1=[265,185],ph=PI/6-i,Ds=[];g.beginPath();g.moveTo(320,90);g.lineTo(430,280);g.lineTo(210,280);g.closePath();g.globalAlpha=.2;g.fillStyle=col.ac;g.fill();g.globalAlpha=1;g.strokeStyle=col.ink;g.lineWidth=2;g.stroke();
+ ln(P1[0]-260*Math.cos(ph),P1[1]-260*Math.sin(ph),P1[0],P1[1],col.ink,3);
+ for(let k=0;k<=6;k++){const kk=k/6,n=p.n-p.ds/2+p.ds*kk,r1=Math.asin(Math.sin(i)/n),ps=PI/6-r1,u=[Math.cos(ps),Math.sin(ps)],d2=[110,190],a0=[320-P1[0],90-P1[1]],cr=(a,b)=>a[0]*b[1]-a[1]*b[0],lam=cr(a0,d2)/cr(u,d2),P2=[P1[0]+lam*u[0],P1[1]+lam*u[1]],s=n*Math.sin(A-r1),c='hsl('+270*kk+',90%,50%)';
+ ln(P1[0],P1[1],P2[0],P2[1],c,2);if(s<=1){const e=Math.asin(s),th=-PI/6+e;ln(P2[0],P2[1],P2[0]+300*Math.cos(th),P2[1]+300*Math.sin(th),c,3);Ds[k]=((i+e-A)*180/PI).toFixed(1)}}
+ tx('লাল আলো সবচেয়ে কম, বেগুনি সবচেয়ে বেশি বেঁকে যায়',16,26);if(Ds[0]&&Ds[6])tx('বিচ্যুতি: লাল '+Ds[0]+'°, বেগুনি '+Ds[6]+'°',16,52,col.ac)}});
+
+sim({t:'পূর্ণ অভ্যন্তরীণ প্রতিফলন',c:[['a','রশ্মির কোণ (অক্ষের সাথে, °)',5,85,25,1],['n','কাচের প্রতিসরাঙ্ক',1.3,2,1.5,.05]],
+ f:p=>{const a=p.a*PI/180,th=PI/2-a,tc=Math.asin(1/p.n),T=140,B=240,tn=Math.tan(a);g.globalAlpha=.2;rc(30,T,580,B-T,col.ac);g.globalAlpha=1;ln(30,T,610,T,col.ink,2);ln(30,B,610,B,col.ink,2);
+ let x=40,y=190,dy=-1;for(let k=0;k<60&&x<610;k++){const w=dy<0?T:B,dx=Math.abs(w-y)/tn;if(x+dx>610){ln(x,y,610,y+dy*(610-x)*tn,col.am,3);break}ln(x,y,x+dx,w,col.am,3);x+=dx;y=w;
+  if(th<=tc){const tt=Math.asin(Math.min(1,p.n*Math.sin(th)));ln(x,y,x+120*Math.sin(tt),y+dy*120*Math.cos(tt),col.ac,3);break}dy=-dy}
+ tx('দেয়ালে আপতন কোণ = '+(th*180/PI).toFixed(1)+'°, ক্রান্তি কোণ = '+(tc*180/PI).toFixed(1)+'°',16,26);tx(th>tc?'পূর্ণ অভ্যন্তরীণ প্রতিফলন: আলো ভেতরেই থাকে (অপটিক্যাল ফাইবার)':'আপতন কোণ ক্রান্তি কোণের কম, আলো বেরিয়ে যায়',16,52,col.ac)}});
+
+sim({t:'লেন্সের ফোকাস দূরত্ব ও ক্ষমতা',c:[['f','ফোকাস দূরত্ব (সেমি)',10,100,40,1],['neg','লেন্স (০ = উত্তল, ১ = অবতল)',0,1,0,1]],
+ f:p=>{const X=200,Y=190,F=4*p.f,ng=p.neg;ln(10,Y,630,Y,col.ln,1);drawLens(X,Y,ng);
+ [-60,-30,0,30,60].forEach(o=>{ln(10,Y+o,X,Y+o,col.am,2);if(!ng)ln(X,Y+o,640,Y+o-o*(640-X)/F,col.ac,2);else{ln(X,Y+o,640,Y+o+o*(640-X)/F,col.ac,2);ln(X,Y+o,X-F,Y,col.ac,1,1)}});
+ if(!ng&&X+F<640){ci(X+F,Y,5,col.am);tx('F',X+F,Y+24,col.ink,'center')}if(ng&&X-F>0){ci(X-F,Y,5,col.am);tx('F',X-F,Y+24,col.ink,'center')}
+ tx('f = '+p.f+' সেমি = '+(p.f/100).toFixed(2)+' মি',16,26);tx('ক্ষমতা P = 1/f = '+((ng?-1:1)*100/p.f).toFixed(2)+' ডায়াপ্টার',16,52,col.ac)}});
+</script></body></html>

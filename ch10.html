@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ১০: স্থির বিদ্যুৎ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ১০: স্থির বিদ্যুৎ</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(10);
+const sg=s=>s>0?'+':'−',chg=(x,y,q,r=18)=>{ci(x,y,r,q>0?col.am:col.ink);tx(sg(q),x,y+6,q>0?'#000':col.bg,'center')};
+
+sim({t:'আধানের আকর্ষণ ও বিকর্ষণ',c:[['a','আধান A (−১ = ঋণাত্মক, ১ = ধনাত্মক)',-1,1,1,2],['b','আধান B (−১ = ঋণাত্মক, ১ = ধনাত্মক)',-1,1,-1,2],['r','দূরত্ব',60,480,200,5]],dr:m=>({r:cl(Math.round((m.x-100)/5)*5,60,480)}),
+ f:p=>{const x1=100,x2=100+p.r,L=Math.min(130,12+4e5/(p.r*p.r)),rep=p.a*p.b>0;chg(x1,190,p.a);chg(x2,190,p.b);
+ if(rep){ar(x1-22,190,x1-22-L,190,col.ac);ar(x2+22,190,x2+22+L,190,col.ac)}else{const l=Math.min(L,(p.r-50)/2);ar(x1+22,190,x1+22+l,190,col.ac);ar(x2-22,190,x2-22-l,190,col.ac)}
+ tx(rep?'সমধর্মী আধান পরস্পরকে বিকর্ষণ করে':'বিপরীতধর্মী আধান পরস্পরকে আকর্ষণ করে',16,26,col.ac);tx('দূরত্ব কমালে বল বাড়ে (তীর বড় হয়)',16,52)}});
+
+sim({t:'তড়িৎবীক্ষণ যন্ত্র',c:[['q','দণ্ডের আধান (−১ = ঋণাত্মক, ১ = ধনাত্মক)',-1,1,1,2],['mag','আধানের পরিমাণ',1,5,3,1],['d','দণ্ডের দূরত্ব',20,200,80,5],['tc','দণ্ড ছোঁয়ানো (০ = না, ১ = হ্যাঁ)',0,1,0,1]],dr:m=>({d:cl(Math.round((304-m.x)/5)*5,20,200)}),
+ f:p=>{const X=320,tip=X-16-p.d,th=p.tc==1?Math.min(60,12*p.mag):Math.min(60,800*p.mag/p.d),r=th*PI/180,cs=p.tc==1?p.q:-p.q,ls=p.tc==1?p.q:p.q;
+ rc(tip-220,100,220,20,p.q>0?col.am:col.ink);tx(sg(p.q)+' '+sg(p.q)+' '+sg(p.q),tip-110,116,p.q>0?'#000':col.bg,'center');
+ g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.rect(265,150,110,190);g.stroke();ci(X,110,14,col.ln);ln(X,124,X,240,col.ink,3);
+ const lx=70*Math.sin(r),ly=70*Math.cos(r);ln(X,240,X-lx,240+ly,col.ac,5);ln(X,240,X+lx,240+ly,col.ac,5);
+ tx(sg(cs),X,114,col.ink,'center');tx(sg(ls),X-lx-12,240+ly+8,col.ink,'center');tx(sg(ls),X+lx+12,240+ly+8,col.ink,'center');
+ tx('পাতা '+th.toFixed(0)+'° ফাঁক হয়েছে',16,26,col.ac);tx(p.tc==1?'ছুঁয়ে আধান দিলে দণ্ড সরালেও পাতা ফাঁক থাকে':'আবেশে: দণ্ড কাছে আনলে পাতা ফাঁক হয়, সরালে জোড়া লাগে',16,52);tx('পাতা দুটি একই ধরনের আধান পেয়ে পরস্পরকে ঠেলে',16,78)}});
+
+sim({t:'তড়িৎ ক্ষেত্ররেখা',c:[['mode','বিন্যাস (০ = ধনাত্মক, ১ = ঋণাত্মক, ২ = ধনাত্মক ও ঋণাত্মক, ৩ = দুটি ধনাত্মক)',0,3,2,1],['d','আধানের দূরত্ব',100,300,200,10]],
+ f:p=>{const md=Math.round(p.mode),cx=320,cy=190,Q=md==0?[[cx,cy,1]]:md==1?[[cx,cy,-1]]:md==2?[[cx-p.d/2,cy,1],[cx+p.d/2,cy,-1]]:[[cx-p.d/2,cy,1],[cx+p.d/2,cy,1]];
+ const E=(x,y)=>{let ex=0,ey=0;Q.forEach(([qx,qy,q])=>{const dx=x-qx,dy=y-qy,r2=dx*dx+dy*dy+1,r=Math.sqrt(r2);ex+=q*dx/(r2*r);ey+=q*dy/(r2*r)});const m=Math.hypot(ex,ey)||1;return[ex/m,ey/m]};
+ const pos=Q.filter(q=>q[2]>0),src=pos.length?pos:Q,s=pos.length?1:-1;
+ src.forEach(([qx,qy])=>{for(let k=0;k<12;k++){const a=2*PI*k/12+.26;let x=qx+14*Math.cos(a),y=qy+14*Math.sin(a),ax=0,ay=0,ad=0;g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;g.moveTo(x,y);
+  for(let n=0;n<500;n++){const[ex,ey]=E(x,y);x+=s*ex*4;y+=s*ey*4;g.lineTo(x,y);if(n==40){ax=x;ay=y;ad=Math.atan2(s*ey,s*ex)}if(x<0||x>640||y<0||y>380||Q.some(([ox,oy,oq])=>oq*s<0&&Math.hypot(x-ox,y-oy)<10))break}
+  g.stroke();if(ax){g.beginPath();g.fillStyle=col.ac;g.moveTo(ax+8*Math.cos(ad),ay+8*Math.sin(ad));g.lineTo(ax+6*Math.cos(ad+2.5),ay+6*Math.sin(ad+2.5));g.lineTo(ax+6*Math.cos(ad-2.5),ay+6*Math.sin(ad-2.5));g.fill()}}});
+ Q.forEach(([x,y,q])=>chg(x,y,q,12));tx('ক্ষেত্ররেখা ধনাত্মক আধান থেকে বেরিয়ে ঋণাত্মক আধানে ঢোকে',16,26,col.ac);tx('রেখা ঘন যেখানে, তড়িৎ ক্ষেত্র সেখানে বেশি শক্তিশালী',16,52)}});
+
+sim({t:'দুই আধানের মধ্যবর্তী তড়িৎ বল',c:[['a','আধান q₁ (μC)',-8,8,4,1],['b','আধান q₂ (μC)',-8,8,-4,1],['r','দূরত্ব (সেমি)',10,100,40,1]],dr:m=>({r:cl(Math.round((m.x-100)/5),10,100)}),
+ f:p=>{const x1=100,x2=100+p.r*5,F=9e9*Math.abs(p.a*p.b)*1e-12/(p.r*.01)**2,rep=p.a*p.b>0;let L=Math.min(20+Math.sqrt(F)*8,150);
+ [[x1,p.a],[x2,p.b]].forEach(([x,q])=>{ci(x,190,16,q>0?col.am:col.ink);tx(q>0?'+':q<0?'−':'0',x,196,q>0?'#000':col.bg,'center')});
+ if(F>0){if(rep){ar(x1-18,190,x1-18-L,190,col.ac);ar(x2+18,190,x2+18+L,190,col.ac)}else{L=Math.max(10,Math.min(L,(x2-x1-40)/2));ar(x1+18,190,x1+18+L,190,col.ac);ar(x2-18,190,x2-18-L,190,col.ac)}}
+ tx('কুলম্বের সূত্র: F = k·q₁·q₂ / r²',16,26);tx('বল F = '+F.toFixed(2)+' N'+(F>0?(rep?' (বিকর্ষণ)':' (আকর্ষণ)'):''),16,52,col.ac);tx('দূরত্ব দ্বিগুণ করলে বল চার ভাগের এক ভাগ হয়',16,78)}});
+
+sim({t:'আধান সঞ্চালনের মডেল',c:[['Q','প্রাথমিক আধান (সংখ্যা)',4,24,12,1],['r1','গোলক ১ এর ব্যাসার্ধ',30,70,50,1],['r2','গোলক ২ এর ব্যাসার্ধ',30,90,70,1]],
+ f:(p,t)=>{const T=t%7,s=T<1.5?0:T<4?(1-Math.cos(PI*(T-1.5)/2.5))/2:1,qf=p.Q*p.r1/(p.r1+p.r2),q1=p.Q-(p.Q-qf)*s,q2=p.Q-q1,x1=130,x2=510;
+ const sph=(x,r,n)=>{g.globalAlpha=.2;ci(x,190,r,col.ac);g.globalAlpha=1;g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.arc(x,190,r,0,7);g.stroke();const k=Math.round(n);for(let i=0;i<k;i++){const a=2*PI*i/k;ci(x+(r-8)*Math.cos(a),190+(r-8)*Math.sin(a),4,col.am)}};
+ sph(x1,p.r1,q1);sph(x2,p.r2,q2);const a=x1+p.r1,b=x2-p.r2;if(T>=1.5){ln(a,190,b,190,col.ink,2);if(T<4)dt(a,190,b,190,6,t)}else{ln(a,190,316,190,col.ink,2);ln(324,190,b,190,col.ink,2);ln(316,190,324,172,col.ink,2);tx('সুইচ খোলা',320,150,col.ink,'center')}
+ tx('আধান: গোলক ১ = '+Math.round(q1)+', গোলক ২ = '+Math.round(q2),16,26,col.ac);tx('সংযোগ দিলে আধান ব্যাসার্ধের অনুপাতে ভাগ হয়, বড় গোলক বেশি পায়',16,52)}});
+</script></body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ১১: চল বিদ্যুৎ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ১১: চল বিদ্যুৎ</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(11);
+const bat=(x,y)=>{ln(x-16,y,x+16,y,col.ink,4);ln(x-9,y+14,x+9,y+14,col.ink,4)},meter=(x,y,s)=>{g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.arc(x,y,17,0,7);g.stroke();tx(s,x,y+6,col.ink,'center')};
+
+sim({t:'সরল বৈদ্যুতিক বর্তনী',c:[['V','ব্যাটারির ভোল্টেজ (V)',1,12,6,1],['R','বাল্বের রোধ (Ω)',1,20,6,1],['sw','সুইচ (০ = বন্ধ, ১ = চালু)',0,1,1,1]],
+ f:(p,t)=>{const I=p.sw?p.V/p.R:0,P=I*I*p.R,pr=Math.min(1,P/40),S=[[100,100,298,100],[342,100,540,100],[540,100,540,160],[540,240,540,300],[540,300,100,300],[100,300,100,205],[100,177,100,100]];
+ S.forEach(l=>ln(...l,col.ink,2));bat(100,191);tx('+',116,190);tx('ব্যাটারি',130,196);g.globalAlpha=.15+.5*pr;ci(320,100,40,col.am);g.globalAlpha=.3+.7*pr;ci(320,100,22,col.am);g.globalAlpha=1;g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.arc(320,100,22,0,7);g.stroke();tx('বাল্ব',320,146,col.ink,'center');
+ if(p.sw)ln(540,160,540,240,col.ink,2);else{ln(540,160,516,236,col.ink,2);tx('খোলা',560,205)}tx('সুইচ',560,185);if(I>0)S.forEach(l=>dt(...l,I,t));
+ tx(p.sw?'প্রবাহ I = V/R = '+I.toFixed(2)+' A':'সুইচ খোলা: বর্তনী অসম্পূর্ণ, বিদ্যুৎ নেই',16,26,col.ac);tx('ক্ষমতা P = V × I = '+(p.V*I).toFixed(1)+' W (বাল্ব তত উজ্জ্বল)',16,52)}});
+
+sim({t:'ওহমের সূত্রের পরীক্ষণ',c:[['V','ভোল্টেজ (V)',0,12,6,.5],['R','রোধ (Ω)',1,20,5,1]],
+ f:p=>{const I=p.V/p.R;ln(60,100,150,100,col.ink,2);ln(210,100,300,100,col.ink,2);ln(300,100,300,163,col.ink,2);ln(300,197,300,260,col.ink,2);ln(300,260,60,260,col.ink,2);ln(60,260,60,205,col.ink,2);ln(60,177,60,100,col.ink,2);
+ bat(60,191);rc(150,90,60,20,col.ac);tx('R',180,84,col.ink,'center');meter(300,180,'A');ln(150,100,150,50);ln(150,50,163,50);ln(210,100,210,50);ln(210,50,197,50);meter(180,50,'V');
+ ln(360,330,620,330,col.ink,1);ln(360,330,360,60,col.ink,1);ln(360,330,360+21*12/p.R,66,col.ac,2);ci(360+21*I,330-22*p.V,6,col.am);ln(360+21*I,330-22*p.V,360+21*I,330,col.am,1,1);tx('I (A) →',560,352);tx('V',364,56);
+ tx('V = '+p.V+' V, I = '+I.toFixed(2)+' A, V/I = '+p.R+' Ω (ধ্রুব)',16,300,col.ac);tx('V বনাম I সরলরেখা: V ∝ I (ওহমের সূত্র)',16,326)}});
+
+const ser=[['V','ভোল্টেজ (V)',1,24,12,1],['a','R₁ (Ω)',1,20,2,1],['b','R₂ (Ω)',1,20,4,1],['c','R₃ (Ω)',1,20,6,1]];
+sim({t:'শ্রেণি সমবায়',c:ser,
+ f:(p,t)=>{const R=[p.a,p.b,p.c],Re=R[0]+R[1]+R[2],I=p.V/Re,S=[[100,100,540,100],[540,100,540,300],[540,300,100,300],[100,300,100,205],[100,177,100,100]];S.forEach(l=>ln(...l,col.ink,2));bat(100,191);
+ [190,320,450].forEach((x,i)=>{rc(x-35,90,70,20,col.ac);tx('R'+(i+1),x,82,col.ink,'center');tx((I*R[i]).toFixed(1)+' V',x,136,col.am,'center')});S.forEach(l=>dt(...l,I,t));
+ tx('মোট রোধ = R₁ + R₂ + R₃ = '+Re+' Ω',16,196);tx('প্রতিটিতে একই প্রবাহ I = '+I.toFixed(2)+' A',16,226,col.ac);tx('ভোল্টেজ ভাগ হয়: V₁ + V₂ + V₃ = '+p.V+' V',16,256)}});
+
+sim({t:'সমান্তরাল সমবায়',c:ser,
+ f:(p,t)=>{const R=[p.a,p.b,p.c],Ib=R.map(r=>p.V/r),I=Ib[0]+Ib[1]+Ib[2],xs=[240,360,480];ln(100,100,480,100,col.ink,2);ln(480,300,100,300,col.ink,2);ln(100,300,100,205,col.ink,2);ln(100,177,100,100,col.ink,2);bat(100,191);
+ xs.forEach((x,i)=>{ln(x,100,x,170,col.ink,2);ln(x,230,x,300,col.ink,2);rc(x-10,170,20,60,col.ac);tx('R'+(i+1),x+16,205);tx(Ib[i].toFixed(2)+' A',x,326,col.am,'center');dt(x,100,x,170,Ib[i],t);dt(x,230,x,300,Ib[i],t)});
+ dt(100,100,240,100,I,t);dt(240,100,360,100,Ib[1]+Ib[2],t);dt(360,100,480,100,Ib[2],t);dt(480,300,360,300,Ib[2],t);dt(360,300,240,300,Ib[1]+Ib[2],t);dt(240,300,100,300,I,t);dt(100,300,100,205,I,t);dt(100,177,100,100,I,t);
+ tx('তুল্য রোধ = '+(p.V/I).toFixed(2)+' Ω (সবচেয়ে ছোট রোধের চেয়েও কম)',16,26,col.ac);tx('প্রতিটি শাখায় ভোল্টেজ সমান = '+p.V+' V',16,52);tx('মোট প্রবাহ I = I₁ + I₂ + I₃ = '+I.toFixed(2)+' A',16,78)}});
+
+sim({t:'অ্যামিটার ও ভোল্টমিটারের সংযোগ',c:[['V','ব্যাটারি (V)',1,12,6,1],['R','রোধ (Ω)',1,20,5,1],['a','অ্যামিটার (০ = সমান্তরালে, ১ = শ্রেণিতে)',0,1,1,1],['v','ভোল্টমিটার (০ = শ্রেণিতে, ১ = সমান্তরালে)',0,1,1,1]],
+ f:(p,t)=>{const Ra=.05,Rv=1e6,R=p.R,V=p.V,as=p.a==1,vp=p.v==1,fm=x=>x>=100?x.toFixed(0):x>=.01?x.toFixed(2):x.toExponential(1);let I,Ar,Vr;
+ if(as&&vp){const Rp=R*Rv/(R+Rv);I=V/(Ra+Rp);Ar=I;Vr=I*Rp}else if(as){I=V/(Ra+R+Rv);Ar=I;Vr=I*Rv}else if(vp){Ar=V/Ra;I=Ar;Vr=V}else{const Rq=R*Ra/(R+Ra);I=V/(Rv+Rq);Ar=I*R/(R+Ra);Vr=I*Rv}
+ const hot=Ar>20,k=hot?col.am:col.ink,S=[[100,100,540,100],[540,100,540,300],[540,300,100,300],[100,300,100,205],[100,177,100,100]];S.forEach(l=>ln(...l,k,hot?4:2));bat(100,191);rc(270,90,60,20,col.ac);tx('R',300,82,col.ink,'center');
+ const se=[],pa=[];(as?se:pa).push('A');(vp?pa:se).push('V');se.forEach((s,i)=>{const x=i?170:430;rc(x-24,90,48,20,col.pn);meter(x,100,s)});
+ pa.forEach((s,j)=>{const y=170+45*j,xl=265-12*j,xr=335+12*j;ln(xl,100,xl,y,col.ink,2);ln(xr,100,xr,y,col.ink,2);ln(xl,y,283,y,col.ink,2);ln(317,y,xr,y,col.ink,2);meter(300,y,s)});
+ if(I>1e-4)S.forEach(l=>dt(...l,Math.min(8,I),t));tx('অ্যামিটার পাঠ = '+fm(Ar)+' A',16,26,col.ac);tx('ভোল্টমিটার পাঠ = '+fm(Vr)+' V',16,52,col.ac);
+ tx(as&&vp?'সঠিক সংযোগ: অ্যামিটার শ্রেণিতে, ভোল্টমিটার সমান্তরালে':!as&&vp?'ভুল: অ্যামিটার সমান্তরালে, রোধ শর্ট হয়ে প্রবল বিদ্যুৎ চলছে!':as?'ভুল: ভোল্টমিটার শ্রেণিতে, বর্তনীতে প্রায় বিদ্যুৎ নেই':'দুটি যন্ত্রই ভুলভাবে লাগানো',16,78)}});
+
+sim({t:'বৈদ্যুতিক ক্ষমতা ও শক্তি',c:[['V','ভোল্টেজ (V)',10,240,220,10],['R','রোধ (Ω)',50,2000,484,10],['h','ব্যবহারের সময় (ঘণ্টা)',1,10,5,1]],
+ f:p=>{const P=p.V*p.V/p.R,I=p.V/p.R,E=P*p.h/1000,pr=Math.min(1,P/150);g.globalAlpha=.12+.5*pr;ci(120,220,64,col.am);g.globalAlpha=.3+.7*pr;ci(120,220,36,col.am);g.globalAlpha=1;g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.arc(120,220,36,0,7);g.stroke();rc(104,256,32,26,col.ink);
+ ln(300,330,620,330,col.ink,1);ln(300,330,300,150,col.ink,1);ln(300,330,600,330-P*10/1000*15,col.ac,2);ci(300+30*p.h,330-E*15,6,col.am);ln(300+30*p.h,330-E*15,300+30*p.h,330,col.am,1,1);tx('সময় (ঘণ্টা) →',500,352);tx('শক্তি (kWh)',304,144);
+ tx('ক্ষমতা P = V²/R = '+P.toFixed(0)+' ওয়াট, প্রবাহ I = '+I.toFixed(2)+' A',16,26,col.ac);tx('শক্তি = P × t = '+E.toFixed(2)+' kWh (ইউনিট)',16,52);tx('খরচ (৮ টাকা/ইউনিট ধরে) = '+(E*8).toFixed(1)+' টাকা',16,78)}});
+</script></body></html>

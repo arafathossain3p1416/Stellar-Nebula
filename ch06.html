@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ৬: বস্তুর ওপর তাপের প্রভাব</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ৬: বস্তুর ওপর তাপের প্রভাব</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(6);
+const erfc=x=>{const z=Math.abs(x),t=1/(1+.3275911*z),y=t*(.254829592+t*(-.284496736+t*(1.421413741+t*(-1.453152027+t*1.061405429))))*Math.exp(-z*z);return x>=0?y:2-y};
+
+sim({t:'কঠিন পদার্থের তাপীয় প্রসারণ',c:[['T','তাপমাত্রা বৃদ্ধি (°C)',0,300,150,5]],
+ f:p=>{[['লোহা',12],['তামা',17],['অ্যালুমিনিয়াম',23]].forEach(([n,a],i)=>{const y=100+i*90,e=a*p.T/100;rc(40,y-35,14,70,col.ink);rc(54,y-15,400+e,30,'hsl('+(210-p.T*.6)+',75%,50%)');
+  tx(n+': α = '+a+'×10⁻⁶, ΔL = '+(a*p.T/1000).toFixed(2)+' মিমি',54,y-24)});ln(454,50,454,320,col.ink,1,1);tx('শুরুর দৈর্ঘ্য',460,48);tx('১ মিটার দণ্ডের জন্য ΔL = L·α·ΔT (বৃদ্ধি বড় করে দেখানো)',16,356)}});
+
+sim({t:'তরলের তাপীয় প্রসারণ',c:[['T','তাপমাত্রা বৃদ্ধি (°C)',0,100,50,1]],
+ f:p=>{[['পারদ',1.8e-4,col.ink],['পানি',2.1e-4,col.ac],['অ্যালকোহল',11e-4,col.am]].forEach(([n,b,c],i)=>{const cx=120+i*200,h=b*p.T*1500;rc(cx-6,92,12,208,col.ln);rc(cx-6,292-h,12,h+38,c);ci(cx,330,28,c);
+  tx(n,cx,372,col.ink,'center');tx((b*p.T*100).toFixed(2)+'% আয়তন বৃদ্ধি',cx,74,col.ink,'center')});tx('একই তাপে ভিন্ন তরল ভিন্ন হারে প্রসারিত হয় (ΔV = V·γ·ΔT)',16,26,col.ac)}});
+
+sim({t:'তাপ সঞ্চালন: পরিবহন, পরিচলন ও বিকিরণ',c:[['mode','পদ্ধতি (০ = পরিবহন, ১ = পরিচলন, ২ = বিকিরণ)',0,2,0,1],['k','তাপের মাত্রা (১–৫)',1,5,3,1]],
+ f:(p,t)=>{if(p.mode==0){const tt=t%12+.3;for(let i=0;i<42;i++){const T=erfc(i*12/(2*Math.sqrt(p.k*1500*tt)));rc(60+i*12,160,12,60,'hsl('+240*(1-T)+',80%,50%)')}ci(40,190,16,col.am);
+   tx('পরিবহন: তাপ কণা থেকে কণায় যায়, কণা নিজের জায়গায় থাকে',16,26,col.ac);tx('কঠিন পদার্থে (যেমন ধাতব দণ্ডে) এভাবে তাপ ছড়ায়',16,52)}
+  else if(p.mode==1){ln(150,80,150,320);ln(490,80,490,320);ln(150,320,490,320);rc(230,330,180,12,col.am);tx('তাপ',320,360,col.ink,'center');const w=.5+p.k*.15;
+   for(let i=0;i<20;i++){const l=i%2==0,th=(l?-1:1)*w*t+i*.9,x=(l?245:395)+70*Math.cos(th),y=200+95*Math.sin(th);ci(x,y,6,'hsl('+240*(1-(y-105)/190)+',80%,50%)')}
+   tx('পরিচলন: উষ্ণ তরল হালকা হয়ে ওপরে ওঠে, ঠান্ডা নিচে নামে',16,26,col.ac);tx('তরল ও গ্যাসে এভাবে তাপ ছড়ায়',16,52)}
+  else{ci(70,200,30,col.am);for(let r=-2;r<=2;r++){g.beginPath();g.strokeStyle=col.am;g.lineWidth=2;for(let x=110;x<=470;x+=4)g[x>110?'lineTo':'moveTo'](x,200+r*30+(4+p.k*3)*Math.sin((x-t*90)/14));g.stroke()}
+   g.globalAlpha=.2+.16*p.k;rc(480,130,60,140,col.am);g.globalAlpha=1;tx('বিকিরণ: মাধ্যম ছাড়াই তাপ আসে',16,26,col.ac);tx('যেমন সূর্য থেকে পৃথিবীতে; উৎস বেশি গরম হলে বেশি তাপ',16,52)}}});
+
+sim({t:'বরফ গলা ও পানির বাষ্পীভবন',c:[['m','ভর (গ্রাম)',10,200,100,10],['P','তাপ দেওয়ার হার (ওয়াট)',100,1000,500,50]],
+ f:(p,t)=>{const m=p.m,q1=m*21,q2=m*334,q3=m*418,q4=m*2260,P=p.P,a=q1/P,b=q2/P,c=q3/P,d=q4/P,tot=a+b+c+d,ts=tot*Math.min((t%11)/9,1),Q=P*ts;let T,ice=0,wat=0,st;
+ if(Q<q1){T=-10+Q/(m*2.1);ice=1;st='বরফ (কঠিন) গরম হচ্ছে'}else if(Q<q1+q2){T=0;ice=1-(Q-q1)/q2;wat=1-ice;st='বরফ গলছে (তাপমাত্রা স্থির)'}else if(Q<q1+q2+q3){T=(Q-q1-q2)/(m*4.18);wat=1;st='পানি গরম হচ্ছে'}else if(Q<q1+q2+q3+q4){T=100;wat=1-(Q-q1-q2-q3)/q4;st='পানি বাষ্প হচ্ছে (তাপমাত্রা স্থির)'}else{T=100;st='সব পানি বাষ্প হয়ে গেছে'}
+ const X=u=>300+320*u/tot,Y=v=>330-(v+10)*2.2;ln(60,120,60,330);ln(60,330,200,330);ln(200,330,200,120);g.globalAlpha=.35;rc(61,330-150*wat,138,150*wat,col.ac);g.globalAlpha=1;rc(90,330-135*wat-110*ice,80,110*ice,col.ln);ci(130,350,12,col.am);
+ if(Q>q1+q2+q3)for(let i=0;i<6;i++)ci(80+i*22,110-((t*30+i*20)%80),5,col.ln);
+ ln(300,330,620,330,col.ink,1);ln(300,80,300,330,col.ink,1);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;[[0,-10],[a,0],[a+b,0],[a+b+c,100],[tot,100]].forEach(([u,v],i)=>g[i?'lineTo':'moveTo'](X(u),Y(v)));g.stroke();ci(X(ts),Y(T),6,col.am);
+ tx('সময় →',560,352);tx('তাপমাত্রা',304,76);tx(st,16,26,col.ac);tx('তাপমাত্রা '+T.toFixed(0)+'°C, শোষিত তাপ '+Q.toFixed(0)+' জুল',16,52)}});
+
+sim({t:'তাপমাত্রার পরিবর্তনে আয়তনের পরিবর্তন',c:[['T','তাপমাত্রা (°C)',-200,400,27,1]],
+ f:(p,t)=>{const K=p.T+273,h=K*.4,sp=Math.sqrt(K/300);rc(100,60,6,280,col.ink);rc(300,60,6,280,col.ink);rc(100,340,206,6,col.ink);rc(100,340-h-8,206,8,col.ink);rc(170,340-h-32,60,24,col.ln);tx('ধ্রুব চাপ',200,340-h-38,col.ink,'center');
+ for(let i=0;i<14;i++){const x=112+176*(.5+.5*Math.sin((1+(i*7%5)*.4)*sp*t*1.6+i*1.3)),y=332-(h-16)*(.5+.5*Math.sin((1.2+(i*3%4)*.5)*sp*t*1.6+i*2.1));ci(x,y,5,col.am)}
+ ln(360,330,620,330,col.ink,1);ln(360,330,360,60,col.ink,1);ln(360,330,619,50,col.ac,2);ci(360+K*.37,330-K*.4,6,col.am);tx('পরম তাপমাত্রা (K) →',470,352);tx('আয়তন',364,56);
+ tx('T = '+K+' K, আপেক্ষিক আয়তন = '+(K/300).toFixed(2),16,26,col.ac);tx('ধ্রুব চাপে গ্যাসের আয়তন পরম তাপমাত্রার সমানুপাতিক',16,52)}});
+</script></body></html>

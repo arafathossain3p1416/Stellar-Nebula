@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ১: ভৌত রাশি এবং তাদের পরিমাপ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ১: ভৌত রাশি এবং তাদের পরিমাপ</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(1);
+// ভার্নিয়ার স্কেল আঁকে (১ মিমি = ১৬ px, ভার্নিয়ার ভাগ = ০.৯ মিমি), পাঠ ফেরত দেয়
+function vern(w,ob){const x=40+16*w;let a=Math.floor(w+1e-6),k=Math.round((w-a)*10);if(k==10){k=0;a++}
+ rc(30,130,540,26,col.ln);ob&&ob(x);rc(28,60,12,130,col.ink);rc(x,60,12,130,col.ink);
+ for(let i=0;i<=32;i++){ln(40+16*i,130,40+16*i,i%10?142:150,col.ink,1);if(i%10==0)tx(i/10,40+16*i,124,col.ink,'center')}
+ tx('সেমি',560,124);g.globalAlpha=.35;rc(x,160,10*14.4+24,50,col.am);g.globalAlpha=1;
+ for(let j=0;j<=10;j++){ln(x+14.4*j,160,x+14.4*j,j%5?172:180,col.ink,1);if(j%5==0)tx(j,x+14.4*j,200,col.ink,'center')}
+ ln(x+14.4*k,130,x+14.4*k,172,col.ac,3);return[a,k]}
+sim({t:'ভার্নিয়ার ক্যালিপার্স',c:[['w','বস্তুর দৈর্ঘ্য (মিমি)',0,30,12.3,.1]],dr:m=>({w:cl(Math.round((m.x-40)/1.6)/10,0,30)}),
+ f:p=>{const[a,k]=vern(p.w,x=>rc(40,80,x-40,50,col.ac));
+ tx('ক্ষুদ্রতম গণনা = ০.১ মিমি',16,250);tx('প্রধান স্কেল পাঠ = '+a+' মিমি',16,278);tx('ভার্নিয়ার সমাপতন = '+k+' ভাগ → '+k+' × ০.১ = '+(k/10).toFixed(1)+' মিমি',16,306);tx('মোট পাঠ = '+(a+k/10).toFixed(1)+' মিমি',16,334,col.ac)}});
+
+sim({t:'স্ক্রু গজ',c:[['w','বস্তুর পুরুত্ব (মিমি)',0,8,3.27,.01]],dr:m=>({w:cl(Math.round((m.x-60)/.3)/100,0,8)}),
+ f:p=>{const x=60+30*p.w,main=Math.floor(p.w/.5+1e-6)*.5,fr=(p.w-main)*50,n=Math.round(fr)%50,cx=500,cy=130,R=80;
+ rc(40,90,20,80,col.ink);rc(60,100,x-60,60,col.ac);rc(x,115,260-x+60,30,col.ink);rc(60,200,300,6,col.ln);
+ for(let i=0;i<=16;i++){ln(60+15*i,200,60+15*i,i%2?212:220,col.ink,1);if(i%2==0)tx(i/2,60+15*i,240,col.ink,'center')}ln(x,190,x,225,col.am,3);
+ g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.arc(cx,cy,R,0,7);g.stroke();
+ for(let i=0;i<50;i++){const th=(i-fr)/50*2*PI-PI/2,L=i%5?8:16;ln(cx+(R-L)*Math.cos(th),cy+(R-L)*Math.sin(th),cx+R*Math.cos(th),cy+R*Math.sin(th),col.ink,1)}
+ ln(cx,cy-R-16,cx,cy-R+20,col.ac,3);tx('বৃত্তাকার স্কেল',cx,cy+R+34,col.ink,'center');
+ tx('পিচ = ০.৫ মিমি, ভাগ ৫০টি, ক্ষুদ্রতম গণনা = ০.০১ মিমি',16,270);tx('প্রধান স্কেল পাঠ = '+main.toFixed(1)+' মিমি',16,298);tx('বৃত্তাকার স্কেল পাঠ = '+n+' × ০.০১ = '+(n/100).toFixed(2)+' মিমি',16,326);tx('মোট পাঠ = '+(main+n/100).toFixed(2)+' মিমি',16,354,col.ac)}});
+
+sim({t:'স্লাইড ক্যালিপার্স দিয়ে বস্তুর মাত্রা পরিমাপ',c:[['d','মাপার মাত্রা (০ = দৈর্ঘ্য, ১ = ব্যাস)',0,1,0,1],['w','চোয়ালের অবস্থান (মিমি)',0,30,5,.1]],dr:m=>({w:cl(Math.round((m.x-40)/1.6)/10,0,30)}),
+ f:p=>{const T=p.d?12.7:23.4,[a,k]=vern(p.w,x=>{rc(40,80,16*T,50,col.am);g.globalAlpha=1}),ok=Math.abs(p.w-T)<.06,rd=a+k/10;
+ tx('একটি সিলিন্ডার: '+(p.d?'ব্যাস':'দৈর্ঘ্য')+' মাপুন। চোয়াল বস্তুর গায়ে লাগান।',16,250);tx('তোমার পাঠ = '+rd.toFixed(1)+' মিমি',16,278);
+ tx(ok?'সঠিক! আসল মান '+T+' মিমি':rd<T?'চোয়াল আরও খুলুন':'চোয়াল আরও চেপে আনুন',16,306,ok?col.ac:col.ink)}});
+</script></body></html>

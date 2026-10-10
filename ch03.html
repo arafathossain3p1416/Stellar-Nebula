@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ৩: বল</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ৩: বল</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(3);
+
+sim({t:'নিউটনের দ্বিতীয় সূত্রের মডেল',c:[['F','বল (N)',0,50,20,1],['m','ভর (কেজি)',1,20,5,1]],
+ f:(p,t)=>{const T=Math.min(t%7,6),a=p.F/p.m,s=.5*a*T*T,w=30+p.m*3,x=60+(s*4)%440,y=300-w/2;rc(0,300,640,80,col.ln);rc(x,300-w,w,w,col.ac);
+ if(p.F>0)ar(Math.max(4,x-Math.max(10,p.F*3)),y,x,y,col.am);
+ tx('ত্বরণ a = F/m = '+a.toFixed(2)+' মি/সে²',16,26);tx('বেগ v = '+(a*T).toFixed(1)+' মি/সে',16,52);tx('সরণ s = '+s.toFixed(1)+' মি',16,78)}});
+
+sim({t:'ক্রিয়া ও প্রতিক্রিয়া বল',c:[['ma','A এর ভর (কেজি)',20,100,50,5],['mb','B এর ভর (কেজি)',20,100,80,5],['F','ধাক্কার বল (N)',50,400,200,10]],
+ f:(p,t)=>{const T=t%6,tp=Math.min(T,1),aA=p.F/p.ma,aB=p.F/p.mb,dA=.5*aA*tp*tp+aA*tp*(T-tp),dB=.5*aB*tp*tp+aB*tp*(T-tp),wA=30+p.ma/2,wB=30+p.mb/2;
+ const xA=Math.max(wA/2+4,320-wA/2-6*dA),xB=Math.min(636-wB/2,320+wB/2+6*dB);rc(0,300,640,80,col.ln);rc(xA-wA/2,300-wA,wA,wA,col.ac);rc(xB-wB/2,300-wB,wB,wB,col.am);tx('A',xA,300-wA/2+5,'#fff','center');tx('B',xB,300-wB/2+5,'#000','center');
+ if(T<1){const L=Math.min(p.F*.4,140);ar(xA-wA/2,255-wA/2,xA-wA/2-L,255-wA/2,col.ink);ar(xB+wB/2,255-wB/2,xB+wB/2+L,255-wB/2,col.ink);tx('B এর উপর A এর বল',xB,230-wB/2,col.ink,'center');tx('A এর উপর B এর বল',xA,230-wA/2,col.ink,'center')}
+ tx('A এর ত্বরণ = '+aA.toFixed(2)+', B এর ত্বরণ = '+aB.toFixed(2)+' মি/সে²',16,26);tx('বল সমান ও বিপরীত, তাই হালকা বস্তুর ত্বরণ বেশি',16,52,col.ac);tx('বল কাজ করে প্রথম ১ সেকেন্ড',16,78)}});
+
+sim({t:'ঘর্ষণ বলের মডেল',c:[['F','প্রযুক্ত বল (N)',0,100,0,1],['m','ভর (কেজি)',1,20,10,1],['us','স্থিতি ঘর্ষণ গুণাঙ্ক',.1,.9,.4,.05],['uk','গতীয় ঘর্ষণ গুণাঙ্ক',.05,.8,.25,.05]],
+ f:(p,t)=>{const N=p.m*9.8,fs=p.us*N,fk=Math.min(p.uk,p.us)*N,mv=p.F>fs,f=mv?fk:p.F,a=mv?(p.F-fk)/p.m:0,T=t%5,s=.5*a*T*T,w=30+p.m*2,x=40+(s*4)%300;
+ rc(0,300,640,80,col.ln);rc(x,300-w,w,w,col.ac);if(p.F>0)ar(Math.max(4,x-p.F*1.2),300-w/2,x,300-w/2,col.am);if(f>0)ar(x+w/2,322,x+w/2-Math.min(f*1.2,x+w/2-4),322,col.ink);
+ ln(400,170,620,170,col.ink,1);ln(400,50,400,170,col.ink,1);const ys=110/Math.max(fs,1);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;for(let F=0;F<=100;F+=2)g[F?'lineTo':'moveTo'](400+F*2.2,170-ys*(F<=fs?F:fk));g.stroke();ci(400+p.F*2.2,170-ys*f,5,col.am);
+ tx('ঘর্ষণ বল',404,44);tx('প্রযুক্ত বল →',520,192);tx(mv?'বস্তু চলছে':'বস্তু স্থির',16,26,mv?col.ac:col.ink);tx('ঘর্ষণ বল = '+f.toFixed(1)+' N',16,52);tx('সর্বোচ্চ স্থিতি ঘর্ষণ = '+fs.toFixed(1)+' N',16,78);tx('ত্বরণ = '+a.toFixed(2)+' মি/সে²',16,104)}});
+
+sim({t:'ভরবেগ ও সংঘর্ষ',c:[['m1','ভর m₁ (কেজি)',1,10,3,1],['m2','ভর m₂ (কেজি)',1,10,2,1],['v1','বেগ v₁ (মি/সে)',-5,5,4,1],['v2','বেগ v₂ (মি/সে)',-5,5,-1,1],['e','স্থিতিস্থাপকতা (০ = জোড়া লাগে, ১ = পূর্ণ স্থিতিস্থাপক)',0,1,1,.1]],
+ f:(p,t)=>{const k=20,T=t%5,w1=24+p.m1*4,w2=24+p.m2*4,x10=120,x20=420,M=p.m1+p.m2,u1=((p.m1-p.e*p.m2)*p.v1+p.m2*(1+p.e)*p.v2)/M,u2=((p.m2-p.e*p.m1)*p.v2+p.m1*(1+p.e)*p.v1)/M,rel=p.v1-p.v2,
+ tc=rel>.01?(x20-x10-(w1+w2)/2)/(k*rel):99,hit=T>=tc;let x1,x2;
+ if(!hit){x1=x10+k*p.v1*T;x2=x20+k*p.v2*T}else{x1=x10+k*p.v1*tc+k*u1*(T-tc);x2=x20+k*p.v2*tc+k*u2*(T-tc)}
+ x1=cl(x1,w1/2+2,638-w1/2);x2=cl(x2,w2/2+2,638-w2/2);const c1=hit?u1:p.v1,c2=hit?u2:p.v2;rc(0,260,640,30,col.ln);rc(x1-w1/2,260-w1,w1,w1,col.ac);rc(x2-w2/2,260-w2,w2,w2,col.am);
+ if(Math.abs(c1)>.05)ar(x1,236-w1,x1+c1*8,236-w1,col.ink);if(Math.abs(c2)>.05)ar(x2,236-w2,x2+c2*8,236-w2,col.ink);
+ tx('সংঘর্ষের আগে: ভরবেগ '+(p.m1*p.v1+p.m2*p.v2).toFixed(1)+', গতিশক্তি '+(.5*p.m1*p.v1**2+.5*p.m2*p.v2**2).toFixed(1)+' জুল',16,26);
+ tx('সংঘর্ষের পরে: ভরবেগ '+(p.m1*u1+p.m2*u2).toFixed(1)+', গতিশক্তি '+(.5*p.m1*u1**2+.5*p.m2*u2**2).toFixed(1)+' জুল',16,52,col.ac);if(tc==99)tx('এই বেগে সংঘর্ষ হবে না',16,78)}});
+
+sim({t:'সাম্য বলের চিত্র',c:[['W','ঝুলন্ত বস্তুর ওজন (N)',10,100,50,1],['a','বাঁ দড়ির কোণ (°)',10,80,40,1],['b','ডান দড়ির কোণ (°)',10,80,50,1]],
+ f:p=>{const a=p.a*PI/180,b=p.b*PI/180,S=Math.sin(a+b),T1=p.W*Math.cos(b)/S,T2=p.W*Math.cos(a)/S,K=.9,L1=Math.min(T1*K,150),L2=Math.min(T2*K,150),X=320,Y=230;
+ ln(X,Y,X-170*Math.cos(a),Y-170*Math.sin(a),col.ink,1,1);ln(X,Y,X+170*Math.cos(b),Y-170*Math.sin(b),col.ink,1,1);ci(X-170*Math.cos(a),Y-170*Math.sin(a),6,col.ink);ci(X+170*Math.cos(b),Y-170*Math.sin(b),6,col.ink);
+ rc(X-25,Y,50,40,col.ln);ci(X,Y,5,col.ink);ar(X,Y,X-L1*Math.cos(a),Y-L1*Math.sin(a),col.ac);ar(X,Y,X+L2*Math.cos(b),Y-L2*Math.sin(b),col.ac);ar(X,Y+40,X,Math.min(Y+40+p.W*1.3,376),col.am);
+ tx('T₁',X-L1*Math.cos(a)-24,Y-L1*Math.sin(a)-8);tx('T₂',X+L2*Math.cos(b)+6,Y-L2*Math.sin(b)-8);tx('W',X+10,Y+60);
+ tx('T₁ = '+T1.toFixed(1)+' N, T₂ = '+T2.toFixed(1)+' N',16,22);tx('ΣFx = '+(T2*Math.cos(b)-T1*Math.cos(a)).toFixed(1)+', ΣFy = '+(T1*Math.sin(a)+T2*Math.sin(b)-p.W).toFixed(1)+' (সাম্য)',16,46,col.ac)}});
+</script></body></html>

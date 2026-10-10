@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ২: গতি</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ২: গতি</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(2);
+
+sim({t:'দূরত্ব–সময় লেখচিত্র',c:[['v','দ্রুতি (মি/সে)',0,9,4,.5],['s0','শুরুর অবস্থান (মি)',0,10,0,1]],
+ f:(p,t)=>{const T=Math.min(t%11,10),s=p.s0+p.v*T;rc(40,60,560,10,col.ln);ci(40+s*5.6,65,12,col.am);tx('০',40,92,col.ink,'center');tx('১০০ মি',600,92,col.ink,'center');
+ ln(60,340,600,340,col.ink,1);ln(60,170,60,340,col.ink,1);ln(60,340-1.7*p.s0,60+54*T,340-1.7*s,col.ac,3);ci(60+54*T,340-1.7*s,6,col.ink);
+ tx('সময় (সে)',330,366,col.ink,'center');tx('দূরত্ব (মি)',66,160);tx('সময় '+T.toFixed(1)+' সে, দূরত্ব '+s.toFixed(1)+' মি',16,120);tx('রেখার ঢাল = দ্রুতি = '+p.v+' মি/সে',16,146,col.ac)}});
+
+sim({t:'বেগ–সময় লেখচিত্র',c:[['u','আদিবেগ (মি/সে)',0,10,2,1],['a','ত্বরণ (মি/সে²)',-2,4,1,.5]],
+ f:(p,t)=>{const T=Math.min(t%11,10),V=x=>p.u+p.a*x,vm=Math.max(10,Math.abs(V(0)),Math.abs(V(10))),k=100/vm,z=230,X=x=>60+54*x;
+ g.globalAlpha=.3;for(let x=0;x<T;x+=.1)rc(X(x),Math.min(z,z-k*V(x)),5.4,Math.abs(k*V(x)),col.am);g.globalAlpha=1;
+ ln(60,z,600,z,col.ink,1);ln(60,130,60,330,col.ink,1);ln(X(0),z-k*V(0),X(T),z-k*V(T),col.ac,3);ci(X(T),z-k*V(T),6,col.ink);tx('বেগ',66,122);tx('সময়',590,z+22);
+ tx('বেগ v = u + at = '+V(T).toFixed(1)+' মি/সে',16,30);tx('সরণ = রেখার নিচের ক্ষেত্রফল = '+(p.u*T+.5*p.a*T*T).toFixed(1)+' মি',16,56,col.ac)}});
+
+sim({t:'মুক্তপতনশীল বস্তুর গতি',c:[['h','উচ্চতা (মি)',5,80,45,1],['g','অভিকর্ষজ ত্বরণ g (মি/সে²)',1.6,25,9.8,.1]],
+ f:(p,t)=>{const h=p.h,G=p.g,T=Math.sqrt(2*h/G),sc=290/h,tt=Math.min(t%(T+1.2),T),s=.5*G*tt*tt,y=40+s*sc;rc(0,336,640,44,col.ln);ln(120,40,120,336,col.ink,1);
+ g.globalAlpha=.35;for(let k=1;k<=6;k++)ci(300,40+290*(k/6)**2,7,col.ac);g.globalAlpha=1;ci(300,y,12,col.am);ar(335,y,335,Math.min(y+G*tt*3,330),col.ink);
+ tx('সমান সময়ের ব্যবধানে অবস্থান',360,60);tx('সময় '+tt.toFixed(2)+' সে',360,120);tx('বেগ v = g·t = '+(G*tt).toFixed(1)+' মি/সে',360,146);tx('দূরত্ব = ½gt² = '+s.toFixed(1)+' মি',360,172);tx('মোট পতনকাল '+T.toFixed(2)+' সে',360,198,col.ac)}});
+
+sim({t:'প্রক্ষেপণ গতির পথ',c:[['v','প্রাথমিক বেগ (মি/সে)',5,40,25,1],['a','নিক্ষেপ কোণ (°)',5,85,45,1]],
+ dr:m=>{const dx=m.x-30,dy=330-m.y;return{a:cl(Math.round(Math.atan2(dy,Math.max(dx,1))*180/PI),5,85),v:cl(Math.round(Math.hypot(dx,dy)/10),5,40)}},
+ f:(p,t)=>{const a=p.a*PI/180,v=p.v,G=9.8,R=v*v*Math.sin(2*a)/G,Hm=v*v*Math.sin(a)**2/(2*G),T=2*v*Math.sin(a)/G,sc=Math.min(560/Math.max(R,1),270/Math.max(Hm,1)),X=s=>30+v*Math.cos(a)*s*sc,Y=s=>330-(v*Math.sin(a)*s-G*s*s/2)*sc;
+ rc(0,330,640,50,col.ln);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;g.setLineDash([5,5]);for(let i=0;i<=60;i++)g[i?'lineTo':'moveTo'](X(T*i/60),Y(T*i/60));g.stroke();g.setLineDash([]);
+ const s=Math.min(t%(T+1.2),T),bx=X(s),by=Y(s),vx=v*Math.cos(a),vy=v*Math.sin(a)-G*s;ci(bx,by,9,col.am);ar(bx,by,bx+vx*3,by,col.ac);if(Math.abs(vy)>.5)ar(bx,by,bx,by-vy*3,col.ink);
+ tx('পাল্লা '+R.toFixed(1)+' মি, সর্বোচ্চ উচ্চতা '+Hm.toFixed(1)+' মি',16,26);tx('অনুভূমিক বেগ (স্থির) = '+vx.toFixed(1)+' মি/সে',16,52,col.ac);tx('উল্লম্ব বেগ = '+vy.toFixed(1)+' মি/সে',16,78)}});
+
+sim({t:'সমবেগ ও ত্বরণযুক্ত গতির মডেল',c:[['v','সমবেগের গাড়ির বেগ (মি/সে)',0,15,8,.5],['a','ত্বরণযুক্ত গাড়ির ত্বরণ (মি/সে²)',0,3,1.5,.1]],
+ f:(p,t)=>{const T=Math.min(t%12,10),s1=p.v*T,s2=.5*p.a*T*T,X=s=>40+Math.min(s,100)*5.4;rc(30,100,580,40,col.ln);rc(30,190,580,40,col.ln);ln(580,95,580,235,col.ink,2,1);
+ rc(X(s1)-18,108,36,24,col.ac);rc(X(s2)-18,198,36,24,col.am);tx('সমবেগ',36,92);tx('ত্বরণযুক্ত (স্থির অবস্থা থেকে)',36,182);
+ tx('সময় '+T.toFixed(1)+' সে',16,274);tx('সমবেগ: s = vt = '+s1.toFixed(1)+' মি',16,302);tx('ত্বরণযুক্ত: s = ½at² = '+s2.toFixed(1)+' মি, বেগ = '+(p.a*T).toFixed(1)+' মি/সে',16,330,col.ac)}});
+</script></body></html>

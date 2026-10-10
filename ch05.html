@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ৫: পদার্থের অবস্থা ও চাপ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ৫: পদার্থের অবস্থা ও চাপ</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(5);
+
+sim({t:'তরলের গভীরতার সঙ্গে চাপের পরিবর্তন',c:[['r','তরলের ঘনত্ব (কেজি/মি³)',700,13600,1000,100],['h','গভীরতা (মি)',0,8,3,.5]],dr:m=>({h:cl(Math.round((m.y-60)/15)/2,0,8)}),
+ f:p=>{const sc=30,wy=60,P=x=>p.r*9.8*x,y=wy+sc*p.h;g.globalAlpha=.25;rc(150,wy,340,330-wy,col.ac);g.globalAlpha=1;ln(150,20,150,330);ln(150,330,490,330);ln(490,20,490,330);ln(150,wy,490,wy,col.ac,2);
+ for(let i=1;i<=8;i++){const L=130*i/8;ar(490-L,wy+sc*i,490,wy+sc*i,col.ac)}ln(320,wy,320,y,col.am,2,1);ci(320,y,9,col.am);
+ tx('গভীরতা h = '+p.h+' মি',16,26);tx('চাপ P = ρgh = '+(P(p.h)/1000).toFixed(1)+' কিলোপাস্কাল',16,52,col.ac);tx('গভীরে চাপ বেশি, তীর বড়',500,100)}});
+
+sim({t:'আর্কিমিডিসের নীতি',c:[['V','বস্তুর আয়তন (সেমি³)',50,500,200,10],['d','বস্তুর ঘনত্ব (গ্রাম/সেমি³)',1.5,8,3,.1],['f','নিমজ্জিত অংশ (%)',0,100,50,1]],
+ f:p=>{const W=p.V*p.d*.0098,Vs=p.V*p.f/100,Fb=Vs*.0098,wy=170,bot=wy+80*p.f/100,top=bot-80;g.globalAlpha=.25;rc(60,wy,240,340-wy,col.ac);g.globalAlpha=1;ln(60,120,60,340);ln(60,340,300,340);ln(300,120,300,340);
+ rc(160,20,40,24,col.ln);ln(180,44,180,top,col.ink,2);rc(140,top,80,80,col.am);
+ tx('বাতাসে ওজন W = '+W.toFixed(2)+' N',330,60);tx('সরানো পানির আয়তন = '+Vs.toFixed(0)+' সেমি³',330,90);tx('প্লবতা বল = '+Fb.toFixed(2)+' N',330,120,col.ac);tx('আপাত ওজন = W − প্লবতা = '+(W-Fb).toFixed(2)+' N',330,150,col.ac);tx('প্লবতা = সরানো পানির ওজন',330,180);
+ ln(530,200,530,330,col.ink,2);ln(590,200,590,330,col.ink,2);ln(530,330,590,330,col.ink,2);g.globalAlpha=.4;rc(531,330-Vs*.25,58,Vs*.25,col.ac);g.globalAlpha=1;tx('সরে আসা পানি',560,352,col.ink,'center')}});
+
+sim({t:'ভাসমান ও নিমজ্জিত বস্তুর মডেল',c:[['d','বস্তুর ঘনত্ব (গ্রাম/সেমি³)',.2,15,.6,.1],['l','তরলের ঘনত্ব (গ্রাম/সেমি³)',.7,13.6,1,.1]],
+ f:p=>{const r=p.d/p.l,fr=Math.min(1,r),wy=150,sus=Math.abs(p.d-p.l)<.05,bot=sus?250:p.d<p.l?wy+100*fr:340,top=bot-100;g.globalAlpha=Math.min(.5,.12*p.l+.1);rc(180,wy,280,340-wy,col.ac);g.globalAlpha=1;ln(180,110,180,340);ln(180,340,460,340);ln(460,110,460,340);rc(270,top,100,100,col.am);
+ ar(320,top+50,320,top+50+40*Math.min(r,2.5),col.ink);ar(320,top+50,320,top+50-40*fr,col.ac);tx('ওজন ↓',380,top+70);tx('প্লবতা ↑',380,top+40,col.ac);
+ tx(sus?'নিমজ্জিত অবস্থায় ভাসছে: ঘনত্ব সমান, ওজন = প্লবতা':p.d<p.l?'ভাসছে: '+(fr*100).toFixed(0)+'% ডুবে আছে (ঘনত্ব < তরলের ঘনত্ব)':'ডুবে যাচ্ছে (ঘনত্ব > তরলের ঘনত্ব)',16,26,col.ac);tx('বস্তু '+p.d+', তরল '+p.l+' গ্রাম/সেমি³',16,52)}});
+
+sim({t:'প্যাসকেলের সূত্র ও হাইড্রোলিক প্রেস',c:[['F','ছোট পিস্টনে বল (N)',10,200,50,10],['a','ছোট পিস্টনের ক্ষেত্রফল (সেমি²)',1,10,2,1],['A','বড় পিস্টনের ক্ষেত্রফল (সেমি²)',20,200,100,10]],
+ f:(p,t)=>{const s=(1-Math.cos(2*PI*(t%4)/4))/2,d1=50*s,d2=d1*p.a/p.A,ws=14+p.a*6,wl=40+p.A*.8,P=p.F/p.a;g.globalAlpha=.25;rc(130-ws/2,170+d1+10,ws,130-d1-10,col.ac);rc(130-ws/2,300,300+0,40,col.ac);rc(420-wl/2,240-d2+10,wl,60+d2-10,col.ac);g.globalAlpha=1;
+ ln(130-ws/2,170,130-ws/2,340);ln(130+ws/2,170,130+ws/2,300);ln(420-wl/2,240,420-wl/2,340);ln(420+wl/2,240,420+wl/2,300);ln(130-ws/2,340,420+wl/2,340);ln(130+ws/2,300,420-wl/2,300);
+ rc(130-ws/2,170+d1,ws,10,col.ink);ln(130,110+d1,130,170+d1,col.ink,3);ar(130,40+d1,130,100+d1,col.am);rc(420-wl/2,240-d2,wl,10,col.ink);rc(420-wl*.4,200-d2,wl*.8,40,col.am);
+ tx('চাপ P = F/a = '+P.toFixed(1)+' N/সেমি² (সব দিকে সমান)',240,26,col.ac);tx('বড় পিস্টনে বল = P × A = '+(P*p.A).toFixed(0)+' N',240,52);tx('বলের গুণন = A/a = '+(p.A/p.a).toFixed(1)+' গুণ',240,78);tx('ছোট পিস্টন '+d1.toFixed(0)+' সরলে বড়টি '+d2.toFixed(1)+' সরে',240,104)}});
+
+const MT=[['কর্ক',.24],['কাঠ',.6],['বরফ',.92],['অ্যালুমিনিয়াম',2.7],['লোহা',7.8],['সিসা',11.3]];
+sim({t:'ঘনত্বের তুলনা',c:[['l','তরলের ঘনত্ব (গ্রাম/সেমি³)',.7,13.6,1,.1]],
+ f:p=>{const wy=140;g.globalAlpha=.25;rc(20,wy,600,330-wy,col.ac);g.globalAlpha=1;ln(20,60,20,330);ln(20,330,620,330);ln(620,60,620,330);
+ MT.forEach(([n,d],i)=>{const cx=75+i*100,bot=d<p.l?wy+60*Math.min(1,d/p.l):330;rc(cx-30,bot-60,60,60,d<p.l?col.am:col.ink);tx(n,cx,352,col.ink,'center');tx(d+'',cx,374,col.ink,'center')});
+ tx('তরলের ঘনত্ব = '+p.l+' গ্রাম/সেমি³, এর চেয়ে কম ঘনত্বের বস্তু ভাসে',16,30,col.ac);tx('(নিচের সংখ্যা: বস্তুর ঘনত্ব)',16,100)}});
+</script></body></html>

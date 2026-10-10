@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ১২: বিদ্যুতের চৌম্বক ক্রিয়া</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ১২: বিদ্যুতের চৌম্বক ক্রিয়া</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(12);
+
+sim({t:'বিদ্যুৎপ্রবাহের চৌম্বক ক্রিয়া ও ওরস্টেডের পরীক্ষা',c:[['i','তড়িৎ প্রবাহ (অ্যাম্পিয়ার)',1,10,5,1]],
+ f:(p,t)=>{const I=p.i,cx=300,cy=200;rc(0,350,640,50,col.ln);ln(cx-100,cy,cx+100,cy,col.ink,4);
+ ar(cx-60,cy-30,cx+60,cy-30,col.ac,2);tx('তড়িৎ প্রবাহ I = '+I+' A',cx,cy-50,col.ac,'center');
+ const ang=Math.sin(t*3)*(I*0.15);
+ g.save();g.translate(cx,cy+60);g.rotate(ang);
+ rc(-25,-8,50,16,col.am);g.fillStyle='#ef4444';g.fillRect(15,-8,10,16);
+ g.restore();tx('চৌম্বক শলাকার বিক্ষেপ',cx,cy+120,col.ink,'center');}});
+
+sim({t:'সলিনয়েড ও তড়িৎচুম্বক',c:[['n','প্যাঁচ সংখ্যা',5,30,15,1],['i','কারেন্ট (A)',1,5,3,1]],
+ f:(p,t)=>{const N=p.n,I=p.i,cx=200,cy=180;
+ for(let i=0;i<N;i++) { let x=cx+i*12; g.beginPath(); g.arc(x,cy,20,0,PI*2); g.strokeStyle=col.ac; g.lineWidth=2; g.stroke(); }
+ tx('সলিনয়েড (তড়িৎচুম্বক)',cx+N*6,cy-40,col.ink,'center');
+ tx('বলরেখা ও চৌম্বক ক্ষেত্র强度: '+(N*I),cx+100,cy+80,col.am,'center');}});
+
+sim({t:'বৈদ্যুতিক মোটর',c:[['s','স্পিড',1,10,5,1]],
+ f:(p,t)=>{const ang=t*p.s,cx=300,cy=200;
+ g.save();g.translate(cx,cy);g.rotate(ang);
+ rc(-40,-20,80,40,col.ac);g.restore();
+ tx('আমাচুর ঘূর্ণন (বৈদ্যুতিক শক্তি ➔ যান্ত্রিক শক্তি)',cx,cy+90,col.ink,'center');}});
+
+sim({t:'তড়িৎচুম্বকীয় আবেশ ও জেনারেটর',c:[['f','ঘূর্ণন কম্পাঙ্ক',1,5,2,1]],
+ f:(p,t)=>{const emf=Math.sin(t*p.f*PI)*5;
+ ln(100,200,500,200,col.ink,2);
+ tx('ইন্দ্রীয় তড়িচ্চালক শক্তি (EMF) = '+emf.toFixed(1)+' V',300,120,col.ac,'center');}});
+
+sim({t:'ট্রান্সফরমার (ধাপক ও অপসারী)',c:[['np','প্রাথমিক প্যাঁচ (Np)',50,200,100,10],['ns','গৌণ প্যাঁচ (Ns)',20,200,500,10],['vp','প্রাথমিক ভোল্টেজ (Vp)',50,220,220,10]],
+ f:(p,t)=>{const Vs=(p.ns/p.np)*p.vp;
+ tx('প্রাথমিক ভোল্টেজ Vp = '+p.vp+' V',100,100,col.ink);
+ tx('গৌণ ভোল্টেজ Vs = '+Vs.toFixed(1)+' V',100,150,col.ac);
+ tx(p.ns>p.np?'স্টেপ-আপ (উচ্চধাপী) ট্রান্সফরমার':'স্টেপ-ডাউন (নিচধাপী) ট্রান্সফরমার',100,220,col.am);}});
+</script></body></html>

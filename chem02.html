@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>অধ্যায় ২: পদার্থের অবস্থা</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+  <h1><a href="chemistry.html">রসায়ন ল্যাব</a></h1>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <h1 class="pg">অধ্যায় ২: পদার্থের অবস্থা</h1>
+  <div id="sims"></div>
+</main>
+
+<script src="common.js"></script>
+<script>
+  const CHEM_CHS = [
+    "রসায়নের ধারণা","পদার্থের অবস্থা","পদার্থের গঠন","পর্যায় সারণি","রাসায়নিক বন্ধন",
+    "মোলের ধারণা ও রাসায়নিক গণনা","রাসায়নিক বিক্রিয়া","রসায়ন ও শক্তি","এসিড-ক্ষারক ও pH",
+    "খনিজ সম্পদ—ধাতু ও অধাতু","খনিজ সম্পদ—জীবাশ্ম","আমাদের জীবনে রসায়ন"
+  ];
+  const CHEM_DONE = [1,2];
+
+  function chemNavHTML(active) {
+    let html = '';
+    CHEM_CHS.forEach((name, i) => {
+      const num = i + 1;
+      const pad = String(num).padStart(2, '0');
+      if (CHEM_DONE.includes(num)) {
+        html += `<a href="chem${pad}.html" class="${active === num ? 'active' : ''}">${num}. ${name}</a>`;
+      } else {
+        html += `<span class="disabled">${num}. ${name}</span>`;
+      }
+    });
+    return html;
+  }
+  $('#nav').innerHTML = chemNavHTML(2);
+
+  // ===== 1. কঠিন, তরল ও গ্যাসের কণার মডেল =====
+  sim({
+    t: 'কঠিন, তরল ও গ্যাসের কণার মডেল',
+    c: [['state', 'অবস্থা (০=কঠিন, ১=তরল, ২=গ্যাস)', 0, 2, 0, 1]],
+    f: (p, t) => {
+      const st = Math.round(p.state);
+      const names = ['কঠিন', 'তরল', 'গ্যাস'];
+      const desc = [
+        'কণাগুলো খুব কাছাকাছি ও নির্দিষ্ট অবস্থানে থাকে',
+        'কণাগুলো কাছাকাছি কিন্তু চলাচল করতে পারে',
+        'কণাগুলো অনেক দূরে ও অবাধে চলাচল করে'
+      ];
+
+      rc(40, 50, 560, 260, col.ln);
+      tx(names[st] + ' অবস্থা', 320, 40, col.ac, 'center');
+
+      // Draw particles
+      const particles = [];
+      if (st === 0) { // solid - grid
+        for (let i = 0; i < 5; i++)
+          for (let j = 0; j < 4; j++)
+            ci(120 + i * 80, 100 + j * 50, 14, col.am);
+      } else if (st === 1) { // liquid - denser random
+        for (let i = 0; i < 20; i++) {
+          const x = 80 + (i % 6) * 80 + Math.sin(t + i) * 8;
+          const y = 90 + Math.floor(i / 6) * 55 + Math.cos(t + i) * 6;
+          ci(x, y, 12, col.am);
+        }
+      } else { // gas - sparse fast
+        for (let i = 0; i < 12; i++) {
+          const x = 80 + (i * 97 + t * 30) % 500;
+          const y = 80 + (i * 53 + t * 20) % 200;
+          ci(x, y, 10, col.am);
+        }
+      }
+
+      tx(desc[st], 40, 340, col.ink);
+      tx('স্লাইডার ঘুরিয়ে অবস্থা পরিবর্তন করুন', 40, 370, col.ac);
+    }
+  });
+
+  // ===== 2. তাপমাত্রা পরিবর্তনে কণার গতির পরিবর্তন =====
+  sim({
+    t: 'তাপমাত্রা পরিবর্তনে কণার গতির পরিবর্তন',
+    c: [['temp', 'তাপমাত্রা (°C)', -10, 100, 25, 5]],
+    f: (p, t) => {
+      const speed = Math.max(0.5, p.temp / 20);
+
+      rc(40, 50, 560, 250, col.ln);
+      tx('তাপমাত্রা: ' + p.temp + ' °C', 320, 40, col.ac, 'center');
+
+      for (let i = 0; i < 18; i++) {
+        const x = 70 + (i * 73 + t * speed * 40) % 520;
+        const y = 80 + (i * 41 + t * speed * 25) % 200;
+        ci(x, y, 11, col.am);
+      }
+
+      tx('তাপমাত্রা বাড়লে কণার গতি বাড়ে', 40, 330, col.ink);
+      tx('তাপমাত্রা কমলে কণার গতি কমে', 40, 360, col.ink);
+    }
+  });
+
+  // ===== 3. গলন, বাষ্পীভবন ও ঘনীভবন =====
+  sim({
+    t: 'গলন, বাষ্পীভবন ও ঘনীভবন',
+    c: [['temp', 'তাপমাত্রা (°C)', 0, 120, 20, 5]],
+    f: (p, t) => {
+      rc(40, 50, 560, 260, col.ln);
+
+      // Ice / Water / Vapor zones
+      if (p.temp < 0) {
+        // solid
+        for (let i = 0; i < 5; i++)
+          for (let j = 0; j < 3; j++)
+            ci(150 + i * 70, 120 + j * 50, 16, '#a0d8ef');
+        tx('বরফ (কঠিন)', 320, 40, col.ac, 'center');
+      } else if (p.temp < 100) {
+        // liquid
+        for (let i = 0; i < 16; i++) {
+          const x = 100 + (i % 6) * 80 + Math.sin(t + i) * 6;
+          const y = 100 + Math.floor(i / 6) * 50 + Math.cos(t * 0.8 + i) * 5;
+          ci(x, y, 13, '#4cc9f0');
+        }
+        tx('পানি (তরল)', 320, 40, col.ac, 'center');
+      } else {
+        // gas
+        for (let i = 0; i < 14; i++) {
+          const x = 80 + (i * 89 + t * 50) % 500;
+          const y = 80 + (i * 67 + t * 35) % 200;
+          ci(x, y, 9, '#90e0ef');
+        }
+        tx('বাষ্প (গ্যাস)', 320, 40, col.ac, 'center');
+      }
+
+      tx('০°C এর নিচে → গলন বিপরীত (জমাট)', 40, 340, col.ink);
+      tx('০°C – ১০০°C → তরল', 40, 365, col.ink);
+      tx('১০০°C এর উপরে → বাষ্পীভবন', 40, 390, col.ink);
+    }
+  });
+
+  // ===== 4. ব্যাপন (Diffusion) =====
+  sim({
+    t: 'ব্যাপন (Diffusion)',
+    c: [['speed', 'ব্যাপনের গতি', 0.5, 3, 1.5, 0.1]],
+    f: (p, t) => {
+      rc(40, 50, 560, 260, col.ln);
+      tx('দুই গ্যাসের ব্যাপন', 320, 40, col.ac, 'center');
+
+      // Left particles (blue)
+      for (let i = 0; i < 12; i++) {
+        const x = 60 + (i * 40 + t * p.speed * 30) % 260;
+        const y = 90 + (i * 37) % 180;
+        ci(x, y, 10, '#4cc9f0');
+      }s
+      // Right particles (pink)
+      for (let i = 0; i < 12; i++) {
+        const x = 340 + (i * 40 - t * p.speed * 30) % 260;
+        const y = 90 + (i * 41) % 180;
+        ci(x, y, 10, '#f72585');
+      }
+
+      // Middle line
+      ln(320, 60, 320, 300, col.ink, 1);
+
+      tx('সময়ের সাথে কণাগুলো মিশে যায় (ব্যাপন)', 40, 340, col.ink);
+      tx('তাপমাত্রা বা গতি বাড়লে ব্যাপন দ্রুত হয়', 40, 370, col.ac);
+    }
+  });
+</script>
+</body>
+</html>

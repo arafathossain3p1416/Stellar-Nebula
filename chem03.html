@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>অধ্যায় ৩: পদার্থের গঠন</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+  <h1><a href="chemistry.html">রসায়ন ল্যাব</a></h1>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <h1 class="pg">অধ্যায় ৩: পদার্থের গঠন</h1>
+  <div id="sims"></div>
+</main>
+
+<script src="common.js"></script>
+<script>
+  const CHEM_CHS = [
+    "রসায়নের ধারণা","পদার্থের অবস্থা","পদার্থের গঠন","পর্যায় সারণি","রাসায়নিক বন্ধন",
+    "মোলের ধারণা ও রাসায়নিক গণনা","রাসায়নিক বিক্রিয়া","রসায়ন ও শক্তি","এসিড-ক্ষারক ও pH",
+    "খনিজ সম্পদ—ধাতু ও অধাতু","খনিজ সম্পদ—জীবাশ্ম","আমাদের জীবনে রসায়ন"
+  ];
+  const CHEM_DONE = [1,2,3];
+
+  function chemNavHTML(active) {
+    let html = '';
+    CHEM_CHS.forEach((name, i) => {
+      const num = i + 1;
+      const pad = String(num).padStart(2, '0');
+      if (CHEM_DONE.includes(num)) {
+        html += `<a href="chem${pad}.html" class="${active === num ? 'active' : ''}">${num}. ${name}</a>`;
+      } else {
+        html += `<span class="disabled">${num}. ${name}</span>`;
+      }
+    });
+    return html;
+  }
+  $('#nav').innerHTML = chemNavHTML(3);
+
+  // ===== 1. পরমাণুর গঠন =====
+  sim({
+    t: 'পরমাণুর গঠন — প্রোটন, নিউট্রন ও ইলেকট্রন',
+    c: [
+      ['p', 'প্রোটন সংখ্যা', 1, 20, 6, 1],
+      ['n', 'নিউট্রন সংখ্যা', 0, 25, 6, 1],
+      ['e', 'ইলেকট্রন সংখ্যা', 1, 20, 6, 1]
+    ],
+    f: (p, t) => {
+      rc(40, 40, 560, 280, col.ln);
+
+      // Nucleus
+      ci(320, 160, 35, '#f72585');
+      tx('নিউক্লিয়াস', 320, 160, '#fff', 'center');
+
+      // Protons & Neutrons labels
+      tx('প্রোটন: ' + Math.round(p.p), 80, 60, col.ac);
+      tx('নিউট্রন: ' + Math.round(p.n), 80, 90, col.ink);
+      tx('ইলেকট্রন: ' + Math.round(p.e), 80, 120, col.am);
+
+      // Electrons orbiting
+      const eCount = Math.round(p.e);
+      for (let i = 0; i < eCount; i++) {
+        const angle = (t * 1.5 + i * (Math.PI * 2 / eCount));
+        const r = 90 + (i % 3) * 25;
+        const x = 320 + Math.cos(angle) * r;
+        const y = 160 + Math.sin(angle) * r;
+        ci(x, y, 8, col.am);
+      }
+
+      tx('পারমাণবিক সংখ্যা = প্রোটন = ' + Math.round(p.p), 40, 350, col.ac);
+      tx('ভরসংখ্যা = প্রোটন + নিউট্রন = ' + (Math.round(p.p) + Math.round(p.n)), 40, 380, col.ink);
+    }
+  });
+
+  // ===== 2. বিভিন্ন মৌলের পরমাণুর মডেল =====
+  sim({
+    t: 'বিভিন্ন মৌলের পরমাণুর মডেল',
+    c: [['el', 'মৌল নির্বাচন (১=H, ২=He, ৩=Li, ৪=C, ৫=O, ৬=Na)', 1, 6, 1, 1]],
+    f: (p, t) => {
+      const elements = [
+        {z:1, n:0, name:'হাইড্রোজেন (H)'},
+        {z:2, n:2, name:'হিলিয়াম (He)'},
+        {z:3, n:4, name:'লিথিয়াম (Li)'},
+        {z:6, n:6, name:'কার্বন (C)'},
+        {z:8, n:8, name:'অক্সিজেন (O)'},
+        {z:11, n:12, name:'সোডিয়াম (Na)'}
+      ];
+      const el = elements[Math.round(p.el) - 1];
+
+      rc(40, 40, 560, 280, col.ln);
+      tx(el.name, 320, 40, col.ac, 'center');
+
+      // Nucleus
+      ci(320, 160, 28 + el.z * 0.8, '#f72585');
+      tx(el.z + 'p', 320, 155, '#fff', 'center');
+      tx(el.n + 'n', 320, 175, '#fff', 'center');
+
+      // Electrons
+      for (let i = 0; i < el.z; i++) {
+        const shell = i < 2 ? 0 : (i < 10 ? 1 : 2);
+        const angle = t * 1.2 + i * (Math.PI * 2 / Math.max(el.z, 1));
+        const r = 70 + shell * 40;
+        ci(320 + Math.cos(angle) * r, 160 + Math.sin(angle) * r, 7, col.am);
+      }
+
+      tx('পারমাণবিক সংখ্যা: ' + el.z, 40, 350, col.ink);
+      tx('ভরসংখ্যা: ' + (el.z + el.n), 40, 380, col.ink);
+    }
+  });
+
+  // ===== 3. আইসোটোপের মডেল =====
+  sim({
+    t: 'আইসোটোপের মডেল',
+    c: [
+      ['p', 'প্রোটন (পারমাণবিক সংখ্যা)', 1, 10, 6, 1],
+      ['n', 'নিউট্রন সংখ্যা', 0, 14, 6, 1]
+    ],
+    f: (p, t) => {
+      const protons = Math.round(p.p);
+      const neutrons = Math.round(p.n);
+      const mass = protons + neutrons;
+
+      rc(40, 40, 560, 260, col.ln);
+      tx('আইসোটোপ মডেল', 320, 40, col.ac, 'center');
+
+      // Nucleus
+      ci(320, 150, 40, '#f72585');
+      tx(protons + 'p + ' + neutrons + 'n', 320, 150, '#fff', 'center');
+
+      // Electrons (same as protons)
+      for (let i = 0; i < protons; i++) {
+        const angle = t * 1.4 + i * (Math.PI * 2 / protons);
+        const r = 100;
+        ci(320 + Math.cos(angle) * r, 150 + Math.sin(angle) * r, 8, col.am);
+      }
+
+      tx('পারমাণবিক সংখ্যা (Z) = ' + protons + ' (অপরিবর্তিত)', 40, 330, col.ink);
+      tx('ভরসংখ্যা (A) = ' + mass, 40, 360, col.ac);
+      tx('আইসোটোপ = একই Z, ভিন্ন A', 40, 390, col.ink);
+    }
+  });
+
+  // ===== 4. ইলেকট্রন বিন্যাস =====
+  sim({
+    t: 'ইলেকট্রন বিন্যাস',
+    c: [['z', 'পারমাণবিক সংখ্যা', 1, 20, 11, 1]],
+    f: (p, t) => {
+      const z = Math.round(p.z);
+      // Simple shell filling
+      let shells = [0, 0, 0, 0];
+      let remaining = z;
+      const maxShell = [2, 8, 8, 2];
+      for (let i = 0; i < 4; i++) {
+        shells[i] = Math.min(remaining, maxShell[i]);
+        remaining -= shells[i];
+      }
+
+      rc(40, 40, 560, 280, col.ln);
+      tx('ইলেকট্রন বিন্যাস (Z = ' + z + ')', 320, 40, col.ac, 'center');
+
+      // Draw shells
+      const colors = ['#4cc9f0', '#90e0ef', '#48cae4', '#00b4d8'];
+      for (let s = 0; s < 4; s++) {
+        if (shells[s] === 0) continue;
+        ci(320, 160, 50 + s * 35, 'transparent');
+        // approximate circle with points
+        for (let i = 0; i < shells[s]; i++) {
+          const angle = t * 0.8 + i * (Math.PI * 2 / shells[s]);
+          const r = 50 + s * 35;
+          ci(320 + Math.cos(angle) * r, 160 + Math.sin(angle) * r, 7, colors[s]);
+        }
+      }
+
+      // Nucleus
+      ci(320, 160, 20, '#f72585');
+
+      const config = shells.filter(x => x > 0).join(', ');
+      tx('বিন্যাস: ' + config, 40, 350, col.ac);
+      tx('K, L, M, N শেল', 40, 380, col.ink);
+    }
+  });
+</script>
+</body>
+</html>

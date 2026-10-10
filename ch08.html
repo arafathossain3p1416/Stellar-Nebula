@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>অধ্যায় ৮: আলোর প্রতিফলন</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
+<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<main><h1 class="pg">অধ্যায় ৮: আলোর প্রতিফলন</h1><div id="sims"></div></main>
+<script src="common.js"></script>
+<script>
+$('#nav').innerHTML=navHTML(8);
+
+sim({t:'আলোর প্রতিফলনের সূত্র',c:[['i','আপতন কোণ (°)',0,85,35,1]],dr:m=>({i:cl(Math.round(Math.atan2(Math.abs(m.x-320),Math.max(250-m.y,1))*180/PI),0,85)}),
+ f:p=>{const i=p.i*PI/180,X=320,Y=250,L=200;for(let x=40;x<=600;x+=16)ln(x,Y,x-10,Y+14,col.ink,1);ln(40,Y,600,Y,col.ink,3);ln(X,Y-230,X,Y,col.ln,1,1);
+ ar(X-L*Math.sin(i),Y-L*Math.cos(i),X,Y,col.am);ar(X,Y,X+L*Math.sin(i),Y-L*Math.cos(i),col.ac);
+ g.lineWidth=2;g.beginPath();g.strokeStyle=col.am;g.arc(X,Y,70,-PI/2-i,-PI/2);g.stroke();g.beginPath();g.strokeStyle=col.ac;g.arc(X,Y,90,-PI/2,-PI/2+i);g.stroke();tx('অভিলম্ব',X+6,Y-215);
+ tx('আপতন কোণ i = '+p.i+'°',16,26,col.am);tx('প্রতিফলন কোণ r = '+p.i+'°',16,52,col.ac);tx('সূত্র: i = r, আর আপতিত রশ্মি, প্রতিফলিত রশ্মি ও অভিলম্ব একই তলে',16,78)}});
+
+sim({t:'সমতল দর্পণে প্রতিবিম্ব',c:[['u','বস্তুর দূরত্ব',30,350,150,1],['h','বস্তুর উচ্চতা',20,80,50,1]],dr:m=>({u:cl(Math.round(400-m.x),30,350)}),
+ f:p=>{const X=400,Y=260,u=p.u,h=p.h,Xo=X-u,Xi=X+u,e1=Math.hypot(u,h),e2=Math.hypot(u,h/2);ln(X,40,X,340,col.ink,4);for(let y=50;y<340;y+=16)ln(X,y,X+10,y+12,col.ink,1);ln(10,Y,630,Y,col.ln,1);
+ ar(Xo,Y,Xo,Y-h,col.am);g.globalAlpha=.6;ar(Xi,Y,Xi,Y-h,col.ink);g.globalAlpha=1;
+ ln(Xo,Y-h,X,Y,col.ac);ln(X,Y,X-260*u/e1,Y+260*h/e1,col.ac);ln(X,Y,Xi,Y-h,col.ink,1.5,1);
+ ln(Xo,Y-h,X,Y-h/2,col.ac);ln(X,Y-h/2,X-260*u/e2,Y-h/2+260*(h/2)/e2,col.ac);ln(X,Y-h/2,Xi,Y-h,col.ink,1.5,1);
+ tx('বস্তুর দূরত্ব = প্রতিবিম্বের দূরত্ব = '+u+' একক',16,26);tx('প্রতিবিম্ব: অবাস্তব, সোজা ও সমান আকারের',16,52,col.ac)}});
+
+const mir=cv=>{const X=320,mx=290;return{c:[['f','ফোকাস দূরত্ব',40,150,80,5],['u','বস্তুর দূরত্ব',30,mx,200,1]],dr:m=>({u:cl(Math.round(X-m.x),30,mx)}),
+ f:p=>{const F=p.f*(cv?-1:1),Y=200,h=40,u=Math.abs(p.u-F)<4?F+4:p.u,v=1/(1/F-1/u),Xo=X-u,Xi=X-v,yi=Y+h*v/u,real=v>0,R=2*Math.abs(F);
+ ln(10,Y,630,Y,col.ln,1);g.beginPath();g.strokeStyle=col.ink;g.lineWidth=4;if(cv)g.arc(X+R,Y,R,PI-.6,PI+.6);else g.arc(X-R,Y,R,-.6,.6);g.stroke();
+ ci(X-F,Y,4,col.am);tx('F',X-F,Y+22,col.ink,'center');ci(X-2*F,Y,6,col.ac);tx('C',X-2*F,Y+24,col.ac,'center');ci(X,Y,4,col.ink);tx('P',X,Y+24,col.ink,'center');
+ ar(Xo,Y,Xo,Y-h,col.am);ln(Xo,Y-h,X,Y-h,col.am);ln(Xo,Y-h,X,Y,col.am);
+ for(const y0 of[Y-h,Y]){if(real)ln(X,y0,Xi,yi,col.ac);else{ln(X,y0,Xi,yi,col.ac,1.5,1);const k=X/(Xi-X);ln(X,y0,0,y0+k*(y0-yi),col.ac)}}
+ if(Xi>0&&Xi<640)ar(Xi,Y,Xi,yi,col.ink);
+ const uu=p.u,e=3,sz=Math.abs(v/u),atF=!cv&&Math.abs(uu-F)<=e,
+ Z=cv?'দর্পণের সামনে যেকোনো স্থানে':uu>2*F+e?'C এর বাইরে':Math.abs(uu-2*F)<=e?'C বিন্দুতে':uu>F+e?'C ও F এর মাঝে':atF?'F বিন্দুতে':'F ও P এর মাঝে',
+ IP=cv?'দর্পণের পেছনে, P ও F এর মাঝে':uu>2*F+e?'F ও C এর মাঝে':Math.abs(uu-2*F)<=e?'C বিন্দুতে':uu>F+e?'C এর বাইরে':atF?'অসীম দূরে':'দর্পণের পেছনে';
+ tx('বস্তু আছে: '+Z,16,26);tx('প্রতিবিম্ব হবে: '+IP,16,52,col.ac);tx(atF?'প্রতিবিম্ব: অত্যন্ত বড়, স্পষ্ট প্রতিবিম্ব গঠিত হয় না':'প্রকৃতি: '+(real?'বাস্তব ও উল্টো':'অবাস্তব ও সোজা')+', '+(sz<.95?'ছোট':sz>1.05?'বড়':'সমান আকারের'),16,78,col.ac);tx('বিবর্ধন '+sz.toFixed(2)+' গুণ',16,104)}}};
+sim({t:'অবতল দর্পণে প্রতিবিম্ব গঠন',...mir(0)});
+sim({t:'উত্তল দর্পণে প্রতিবিম্ব গঠন',...mir(1)});
+
+sim({t:'দর্পণের প্রধান ফোকাস ও বক্রতার কেন্দ্র',c:[['f','ফোকাস দূরত্ব f',40,150,90,5],['n','রশ্মির সংখ্যা (প্রতি পাশে)',1,5,3,1],['d','রশ্মির সর্বোচ্চ উচ্চতা',20,100,60,5]],dr:m=>({d:cl(Math.round(Math.abs(200-m.y)/5)*5,20,100)}),
+ f:p=>{const X=320,Y=200,R=2*p.f,Xc=X-R;ln(10,Y,630,Y,col.ln,1);g.beginPath();g.strokeStyle=col.ink;g.lineWidth=4;g.arc(Xc,Y,R,-.7,.7);g.stroke();
+ for(let i=-p.n;i<=p.n;i++){const dy=Math.min(p.d*i/p.n,.9*R),xh=Xc+Math.sqrt(R*R-dy*dy),xr=Xc+R/(2*Math.sqrt(1-(dy/R)**2));ln(10,Y-dy,xh,Y-dy,col.am);ln(xh,Y-dy,xh+1.4*(xr-xh),Y-dy+1.4*dy,col.ac)}
+ ci(X-p.f,Y,5,col.am);tx('F',X-p.f,Y+24,col.ink,'center');ci(Xc,Y,5,col.ink);tx('C',Xc,Y+24,col.ink,'center');tx('প্রধান ফোকাস F, বক্রতার কেন্দ্র C; f = R/2 = '+p.f,16,26);tx('সমান্তরাল রশ্মি প্রতিফলনের পর F বিন্দুর দিকে যায়',16,52,col.ac)}});
+
+
+</script></body></html>

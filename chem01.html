@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>অধ্যায় ১: রসায়নের ধারণা</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+  <h1><a href="chemistry.html">রসায়ন ল্যাব</a></h1>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <h1 class="pg">অধ্যায় ১: রসায়নের ধারণা</h1>
+  <div id="sims"></div>
+</main>
+
+<script src="common.js"></script>
+<script>
+  const CHEM_CHS = [
+    "রসায়নের ধারণা",
+    "পদার্থের অবস্থা",
+    "পদার্থের গঠন",
+    "পর্যায় সারণি",
+    "রাসায়নিক বন্ধন",
+    "মোলের ধারণা ও রাসায়নিক গণনা",
+    "রাসায়নিক বিক্রিয়া",
+    "রসায়ন ও শক্তি",
+    "এসিড-ক্ষারক ও pH",
+    "খনিজ সম্পদ—ধাতু ও অধাতু",
+    "খনিজ সম্পদ—জীবাশ্ম",
+    "আমাদের জীবনে রসায়ন"
+  ];
+  const CHEM_DONE = [1];
+
+  function chemNavHTML(active) {
+    let html = '';
+    CHEM_CHS.forEach((name, i) => {
+      const num = i + 1;
+      const pad = String(num).padStart(2, '0');
+      if (CHEM_DONE.includes(num)) {
+        html += `<a href="chem${pad}.html" class="${active === num ? 'active' : ''}">${num}. ${name}</a>`;
+      } else {
+        html += `<span class="disabled">${num}. ${name}</span>`;
+      }
+    });
+    return html;
+  }
+
+  $('#nav').innerHTML = chemNavHTML(1);
+
+  // ========== সিমুলেশন ১ ==========
+  sim({
+    t: 'পরীক্ষাগারের যন্ত্রপাতি ও তাদের ব্যবহার',
+    c: [['eq', 'যন্ত্রপাতি নির্বাচন', 0, 5, 0, 1]],
+    f: (p, t) => {
+      const names = ['বিপর (Beaker)', 'টেস্ট টিউব', 'পরিমাপক সিলিন্ডার', 'বুনসেন বার্নার', 'ত্রিপাদ স্ট্যান্ড', 'পুঁটি (Pipette)'];
+      const uses = [
+        'তরল রাখা ও মেশানোর জন্য',
+        'ছোট পরিমাণে বিক্রিয়া চালানোর জন্য',
+        'তরলের আয়তন সঠিকভাবে মাপার জন্য',
+        'তাপ দেওয়ার জন্য',
+        'পাত্র ধরে রাখার জন্য',
+        'সঠিক পরিমাণ তরল তোলার জন্য'
+      ];
+      const idx = Math.round(p.eq);
+
+      rc(40, 50, 560, 280, col.ln);
+
+      if (idx === 0) {
+        rc(220, 120, 120, 140, col.am);
+        rc(230, 130, 100, 110, '#1a1a2e');
+        tx('বিপর', 280, 280, col.ink, 'center');
+      } else if (idx === 1) {
+        rc(270, 100, 40, 160, col.am);
+        rc(275, 105, 30, 140, '#1a1a2e');
+        tx('টেস্ট টিউব', 290, 280, col.ink, 'center');
+      } else if (idx === 2) {
+        rc(250, 90, 60, 180, col.am);
+        rc(255, 95, 50, 160, '#1a1a2e');
+        for (let i = 0; i < 8; i++) ln(255, 110 + i * 18, 305, 110 + i * 18, col.ink, 1);
+        tx('পরিমাপক সিলিন্ডার', 280, 290, col.ink, 'center');
+      } else if (idx === 3) {
+        rc(250, 200, 80, 40, col.am);
+        rc(270, 120, 40, 80, col.ac);
+        ci(290, 110, 25, '#ff6b35');
+        tx('বুনসেন বার্নার', 290, 270, col.ink, 'center');
+      } else if (idx === 4) {
+        ln(220, 220, 280, 120, col.ink, 4);
+        ln(360, 220, 300, 120, col.ink, 4);
+        ln(220, 220, 360, 220, col.ink, 4);
+        rc(250, 100, 80, 20, col.am);
+        tx('ত্রিপাদ স্ট্যান্ড', 290, 260, col.ink, 'center');
+      } else {
+        rc(280, 80, 20, 180, col.am);
+        rc(275, 70, 30, 20, col.am);
+        tx('পুঁটি', 290, 280, col.ink, 'center');
+      }
+
+      tx(names[idx], 40, 360, col.ac);
+      tx('ব্যবহার: ' + uses[idx], 40, 390, col.ink);
+    }
+  });
+
+  // ========== সিমুলেশন ২ ==========
+  sim({
+    t: 'রাসায়নিক পদার্থ মাপা ও আয়তন নির্ণয়',
+    c: [
+      ['mass', 'কঠিন পদার্থের ভর (গ্রাম)', 0, 50, 12, 1],
+      ['vol', 'তরলের আয়তন (মিলি)', 0, 100, 25, 1]
+    ],
+    f: (p, t) => {
+      rc(40, 80, 250, 180, col.ln);
+      tx('ইলেকট্রনিক ব্যালেন্স', 165, 70, col.ink, 'center');
+      rc(70, 110, 190, 50, '#0f0f1a');
+      tx(p.mass.toFixed(1) + ' g', 165, 145, col.ac, 'center');
+      rc(100, 180, 130, 15, col.am);
+      ci(165, 200, 8, col.ink);
+
+      rc(340, 60, 80, 220, col.ln);
+      rc(350, 70, 60, 200, '#1a1a2e');
+      const h = (p.vol / 100) * 180;
+      rc(350, 270 - h, 60, h, col.am);
+      for (let i = 0; i <= 10; i++) {
+        const y = 270 - i * 18;
+        ln(350, y, 360, y, col.ink, 1);
+        if (i % 2 === 0) tx((i * 10).toString(), 335, y + 4, col.ink, 'right');
+      }
+      tx('পরিমাপক সিলিন্ডার', 380, 300, col.ink, 'center');
+
+      tx('মাপা ভর: ' + p.mass.toFixed(1) + ' গ্রাম', 40, 300, col.ac);
+      tx('মাপা আয়তন: ' + p.vol.toFixed(0) + ' মিলি', 40, 330, col.ac);
+      tx('ঘনত্ব (আনুমানিক): ' + (p.vol > 0 ? (p.mass / p.vol).toFixed(2) : '—') + ' g/mL', 40, 360, col.ink);
+    }
+  });
+
+  // ========== সিমুলেশন ৩ ==========
+  sim({
+    t: 'নিরাপদে রাসায়নিক মেশানোর পদ্ধতি',
+    c: [
+      ['a', 'প্রথম দ্রবণের পরিমাণ (মিলি)', 5, 40, 15, 1],
+      ['b', 'দ্বিতীয় দ্রবণের পরিমাণ (মিলি)', 5, 40, 10, 1],
+      ['safe', 'নিরাপদ মিশ্রণ (১ = হ্যাঁ)', 0, 1, 1, 1]
+    ],
+    f: (p, t) => {
+      const total = p.a + p.b;
+
+      rc(60, 80, 100, 140, col.ln);
+      rc(70, 90, 80, 120, '#1a1a2e');
+      rc(70, 210 - p.a * 2.5, 80, p.a * 2.5, '#4cc9f0');
+      tx('দ্রবণ A', 110, 240, col.ink, 'center');
+      tx(p.a + ' mL', 110, 260, col.ink, 'center');
+
+      rc(220, 80, 100, 140, col.ln);
+      rc(230, 90, 80, 120, '#1a1a2e');
+      rc(230, 210 - p.b * 2.5, 80, p.b * 2.5, '#f72585');
+      tx('দ্রবণ B', 270, 240, col.ink, 'center');
+      tx(p.b + ' mL', 270, 260, col.ink, 'center');
+
+      rc(400, 70, 140, 180, col.ln);
+      rc(410, 80, 120, 160, '#1a1a2e');
+
+      if (p.safe > 0.5) {
+        const mixH = Math.min(total * 2.2, 150);
+        rc(410, 240 - mixH, 120, mixH, '#9b5de5');
+        tx('নিরাপদ মিশ্রণ', 470, 40, col.ac, 'center');
+      } else {
+        rc(410, 100, 120, 120, '#ff0000');
+        tx('⚠ বিপদ!', 470, 160, '#fff', 'center');
+        tx('অতিরিক্ত তাপ', 470, 185, '#fff', 'center');
+      }
+
+      tx('নিরাপদ নিয়ম:', 40, 300, col.ac);
+      tx('১. সবসময় অ্যাসিডকে পানিতে মেশাও (উল্টো নয়)', 40, 330, col.ink);
+      tx('২. ধীরে ধীরে মেশাও এবং নাড়াও', 40, 355, col.ink);
+      tx('৩. চোখের সুরক্ষা ও গ্লাভস ব্যবহার করো', 40, 380, col.ink);
+    }
+  });
+</script>
+</body>
+</html>

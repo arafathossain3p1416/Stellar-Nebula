@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>রসায়ন ল্যাব</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+  <h1><a href="index.html">রসায়ন ল্যাব</a></h1>
+  <nav id="nav"></nav>
+</aside>
+
+<main>
+  <h1 class="pg">রসায়ন ল্যাব</h1>
+  <p>নবম–দশম শ্রেণির প্রতিটি অধ্যায়ের সিমুলেশন। স্লাইডার বা মাউস/আঙুল দিয়ে মান বদলে নিজে পরীক্ষা করুন।</p>
+  <ul class="idx" id="list"></ul>
+</main>
+
+<script src="common.js"></script>
+<script>
+  const CHEM_CHS = [
+    "রসায়নের ধারণা",
+    "পদার্থের অবস্থা",
+    "পদার্থের গঠন",
+    "পর্যায় সারণি",
+    "রাসায়নিক বন্ধন",
+    "মোলের ধারণা ও রাসায়নিক গণনা",
+    "রাসায়নিক বিক্রিয়া",
+    "রসায়ন ও শক্তি",
+    "এসিড-ক্ষারক ও pH",
+    "খনিজ সম্পদ—ধাতু ও অধাতু",
+    "খনিজ সম্পদ—জীবাশ্ম",
+    "আমাদের জীবনে রসায়ন"
+  ];
+
+  const CHEM_DONE = [1,2,3];
+
+  function chemNavHTML(active) {
+    let html = '';
+    CHEM_CHS.forEach((name, i) => {
+      const num = i + 1;
+      const pad = String(num).padStart(2, '0');
+      if (CHEM_DONE.includes(num)) {
+        html += `<a href="chem${pad}.html" class="${active === num ? 'active' : ''}">${num}. ${name}</a>`;
+      } else {
+        html += `<span class="disabled">${num}. ${name}</span>`;
+      }
+    });
+    return html;
+  }
+
+  $('#nav').innerHTML = chemNavHTML(0);
+
+  $('#list').innerHTML = CHEM_CHS.map((c, i) => {
+    const num = i + 1;
+    const pad = String(num).padStart(2, '0');
+    if (CHEM_DONE.includes(num)) {
+      return `<li><a href="chem${pad}.html">অধ্যায় ${num}: ${c}</a></li>`;
+    } else {
+      return `<li><span>অধ্যায় ${num}: ${c} (শীঘ্রই)</span></li>`;
+    }
+  }).join('');
+</script>
+
+<footer>
+  <p>&copy; 2026 <span>Stellar Nebula</span> | All Rights Reserved.</p>
+  <p style="margin-top: 5px; font-size: 0.85rem;">Developed & Created with ❤️ by <span>Arafat Hossain</span></p>
+</footer>
+</body>
+</html>
