@@ -3,37 +3,51 @@
 <aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
 <main><h1 class="pg">অধ্যায় ১২: বিদ্যুতের চৌম্বক ক্রিয়া</h1><div id="sims"></div></main>
 <script src="common.js"></script>
+<script src="info.js"></script>
 <script>
 $('#nav').innerHTML=navHTML(12);
+const tri=(x,y,a,k)=>{g.beginPath();g.fillStyle=k;g.moveTo(x+8*Math.cos(a),y+8*Math.sin(a));g.lineTo(x+6*Math.cos(a+2.5),y+6*Math.sin(a+2.5));g.lineTo(x+6*Math.cos(a-2.5),y+6*Math.sin(a-2.5));g.fill()};
 
-sim({t:'বিদ্যুৎপ্রবাহের চৌম্বক ক্রিয়া ও ওরস্টেডের পরীক্ষা',c:[['i','তড়িৎ প্রবাহ (অ্যাম্পিয়ার)',1,10,5,1]],
- f:(p,t)=>{const I=p.i,cx=300,cy=200;rc(0,350,640,50,col.ln);ln(cx-100,cy,cx+100,cy,col.ink,4);
- ar(cx-60,cy-30,cx+60,cy-30,col.ac,2);tx('তড়িৎ প্রবাহ I = '+I+' A',cx,cy-50,col.ac,'center');
- const ang=Math.sin(t*3)*(I*0.15);
- g.save();g.translate(cx,cy+60);g.rotate(ang);
- rc(-25,-8,50,16,col.am);g.fillStyle='#ef4444';g.fillRect(15,-8,10,16);
- g.restore();tx('চৌম্বক শলাকার বিক্ষেপ',cx,cy+120,col.ink,'center');}});
+sim({t:'বিদ্যুৎপ্রবাহের চৌম্বক ক্রিয়া',c:[['I','প্রবাহ (A)',0,10,5,1],['dir','দিক (−১ = পাতার ভেতরে, ১ = পাতার বাইরে)',-1,1,1,2],['r','দূরত্ব (সেমি)',2,20,8,1]],
+ f:p=>{const cx=320,cy=190,ccw=p.dir>0,R=p.r*9,on=p.I>0,tg=a=>ccw?Math.atan2(-Math.cos(a),Math.sin(a)):Math.atan2(Math.cos(a),-Math.sin(a));
+ [45,90,135,180].forEach(r=>{g.globalAlpha=.1+.4*p.I/10;g.beginPath();g.strokeStyle=col.ac;g.lineWidth=1.5;g.arc(cx,cy,r,0,7);g.stroke();g.globalAlpha=1;if(on)for(let k=0;k<4;k++){const a=k*PI/2+.4;tri(cx+r*Math.cos(a),cy+r*Math.sin(a),tg(a),col.ac)}});
+ g.beginPath();g.strokeStyle=col.am;g.lineWidth=3;g.arc(cx,cy,R,0,7);g.stroke();ci(cx,cy,14,col.ink);if(ccw)ci(cx,cy,4,col.bg);else{ln(cx-6,cy-6,cx+6,cy+6,col.bg,2);ln(cx-6,cy+6,cx+6,cy-6,col.bg,2)}
+ for(let k=0;k<6;k++){const a=k*PI/3+.2,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a),d=on?tg(a):-PI/2;ci(x,y,13,col.pn);g.beginPath();g.strokeStyle=col.ink;g.lineWidth=1;g.arc(x,y,13,0,7);g.stroke();ln(x-11*Math.cos(d),y-11*Math.sin(d),x,y,col.ink,3);ln(x,y,x+11*Math.cos(d),y+11*Math.sin(d),col.am,3)}
+ tx('চৌম্বক ক্ষেত্র B = 20·I/r = '+(20*p.I/p.r).toFixed(1)+' μT',16,26,col.ac);tx(on?'দিকনির্দেশক কাঁটা বিদ্যুতের চারপাশে ঘুরে দাঁড়ায়':'বিদ্যুৎ নেই: কাঁটা উত্তর দিকে',16,52);tx('ডান হাতের নিয়ম: বুড়ো আঙুল প্রবাহের দিকে, বাকি আঙুল ক্ষেত্রের দিকে',16,360)}});
 
-sim({t:'সলিনয়েড ও তড়িৎচুম্বক',c:[['n','প্যাঁচ সংখ্যা',5,30,15,1],['i','কারেন্ট (A)',1,5,3,1]],
- f:(p,t)=>{const N=p.n,I=p.i,cx=200,cy=180;
- for(let i=0;i<N;i++) { let x=cx+i*12; g.beginPath(); g.arc(x,cy,20,0,PI*2); g.strokeStyle=col.ac; g.lineWidth=2; g.stroke(); }
- tx('সলিনয়েড (তড়িৎচুম্বক)',cx+N*6,cy-40,col.ink,'center');
- tx('বলরেখা ও চৌম্বক ক্ষেত্র强度: '+(N*I),cx+100,cy+80,col.am,'center');}});
+sim({t:'সলিনয়েড ও তড়িৎচুম্বক',c:[['N','পাকসংখ্যা',10,100,50,5],['I','প্রবাহ (A)',0,5,3,.5],['core','লোহার কোর (০ = নেই, ১ = আছে)',0,1,1,1],['dir','প্রবাহের দিক (−১ বা ১)',-1,1,1,2]],
+ f:p=>{const S=p.N*p.I*(p.core?20:1)/100,x0=200,x1=440,Y=170,n=Math.round(p.N/5),k=Math.min(8,Math.floor(S/4));if(p.core)rc(x0-14,Y-18,x1-x0+28,36,col.ln);
+ for(let i=0;i<n;i++){g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.ellipse(x0+(x1-x0)*(i+.5)/n,Y,6,40,0,0,7);g.stroke()}
+ ln(x0,Y+40,x0,290);ln(x0,290,318,290);ln(326,290,x1,290);ln(x1,290,x1,Y+40);ln(318,276,318,304,col.ink,4);ln(326,282,326,298,col.ink,4);
+ if(p.I>0){g.globalAlpha=Math.min(1,.2+S/40);[1,2,3].forEach(j=>{[-1,1].forEach(s=>{g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;g.moveTo(x1+10,Y);g.bezierCurveTo(x1+60+25*j,Y+s*45*j,x0-60-25*j,Y+s*45*j,x0-10,Y);g.stroke()})});g.globalAlpha=1}
+ tx(p.dir>0?'S':'N',x0-34,Y+6,col.ink,'center');tx(p.dir>0?'N':'S',x1+34,Y+6,col.ink,'center');for(let i=0;i<k;i++)rc(x1+54+i*14,Y-4,10,8,col.ink);
+ tx('চৌম্বক ক্ষেত্র ∝ পাকসংখ্যা × প্রবাহ (আপেক্ষিক মান '+S.toFixed(1)+')',16,26,col.ac);tx('লোহার কোর থাকলে ক্ষেত্র অনেক বেড়ে যায় (তড়িৎচুম্বক)',16,52);tx('আকৃষ্ট পেরেক: '+k+' টি',16,78)}});
 
-sim({t:'বৈদ্যুতিক মোটর',c:[['s','স্পিড',1,10,5,1]],
- f:(p,t)=>{const ang=t*p.s,cx=300,cy=200;
- g.save();g.translate(cx,cy);g.rotate(ang);
- rc(-40,-20,80,40,col.ac);g.restore();
- tx('আমাচুর ঘূর্ণন (বৈদ্যুতিক শক্তি ➔ যান্ত্রিক শক্তি)',cx,cy+90,col.ink,'center');}});
+sim({t:'বৈদ্যুতিক মোটর',c:[['N','পাকসংখ্যা',1,10,5,1],['B','চৌম্বকক্ষেত্র (T)',.1,1,.5,.1],['I','প্রবাহ (A)',1,10,5,1]],
+ f:(p,t)=>{const cx=320,cy=190,R=70,w=Math.min(14,p.N*p.B*p.I*.4),th=w*t,F=p.N*p.B*p.I*.1,s=20+F*8;rc(60,100,60,180,col.am);tx('N',90,196,'#000','center');rc(520,100,60,180,col.ink);tx('S',550,196,col.bg,'center');[140,190,240].forEach(y=>ar(125,y,515,y,col.ln));
+ ln(cx+R*Math.cos(th),cy-R*Math.sin(th),cx-R*Math.cos(th),cy+R*Math.sin(th),col.ac,6);ci(cx,cy,5,col.ink);
+ [1,-1].forEach(sg=>{const x=cx+sg*R*Math.cos(th),y=cy-sg*R*Math.sin(th),up=x>=cx;ci(x,y,9,col.ink);ar(x,y+(up?-12:12),x,y+(up?-12-s:12+s),col.am)});
+ tx('প্রতি বাহুতে বল F = N·B·I·L = '+F.toFixed(2)+' N (L = ০.১ মি)',16,26,col.ac);tx('ঘূর্ণন গতি ≈ '+(w*9.55).toFixed(0)+' পাক/মিনিট',16,52);tx('ফ্লেমিংয়ের বাম হাতের নিয়মে বলের দিক; কমিউটেটর প্রবাহ উল্টে ঘূর্ণন চালু রাখে',16,360)}});
 
-sim({t:'তড়িৎচুম্বকীয় আবেশ ও জেনারেটর',c:[['f','ঘূর্ণন কম্পাঙ্ক',1,5,2,1]],
- f:(p,t)=>{const emf=Math.sin(t*p.f*PI)*5;
- ln(100,200,500,200,col.ink,2);
- tx('ইন্দ্রীয় তড়িচ্চালক শক্তি (EMF) = '+emf.toFixed(1)+' V',300,120,col.ac,'center');}});
+sim({t:'তড়িৎচুম্বকীয় আবেশ',c:[['N','কুণ্ডলীর পাকসংখ্যা',1,50,20,1],['S','চুম্বকের শক্তি',1,5,3,1],['w','চুম্বকের গতির দ্রুততা',.5,3,1.2,.1]],
+ f:(p,t)=>{const ph=x=>Math.exp(-(((x-320)/80)**2)),em=u=>{const x=320+200*Math.sin(p.w*u),v=200*p.w*Math.cos(p.w*u);return p.N*p.S*2*(x-320)/6400*ph(x)*v*.12},e=em(t),x=320+200*Math.sin(p.w*t),a=60*Math.tanh(e/30)*PI/180;
+ rc(x-40,100,40,30,col.am);tx('N',x-20,122,'#000','center');rc(x,100,40,30,col.ink);tx('S',x+20,122,col.bg,'center');for(let i=0;i<6;i++){g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2.5;g.ellipse(320+(i-2.5)*9,115,5,36,0,0,7);g.stroke()}
+ g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.arc(120,330,70,PI,2*PI);g.stroke();ln(120,330,120+62*Math.sin(a),330-62*Math.cos(a),col.am,3);ci(120,330,5,col.ink);tx('গ্যালভানোমিটার',120,356,col.ink,'center');
+ ln(300,250,620,250,col.ln,1);g.beginPath();g.strokeStyle=col.am;g.lineWidth=2;for(let X=300;X<=620;X+=3)g[X>300?'lineTo':'moveTo'](X,300-45*Math.tanh(em(t-(620-X)/100)/30));g.stroke();ci(620,300-45*Math.tanh(e/30),5,col.ink);ln(300,300,620,300,col.ink,1);tx('emf বনাম সময়',304,246);
+ tx('আবেশিত emf = '+e.toFixed(1)+' (আপেক্ষিক মান)',16,26,col.ac);tx('ফ্লাক্স বদলালেই emf আসে; চুম্বক থেমে থাকলে বিদ্যুৎ নেই',16,52);tx('চুম্বক ঢোকার সময় ও বেরোনোর সময় emf বিপরীত',16,78)}});
 
-sim({t:'ট্রান্সফরমার (ধাপক ও অপসারী)',c:[['np','প্রাথমিক প্যাঁচ (Np)',50,200,100,10],['ns','গৌণ প্যাঁচ (Ns)',20,200,500,10],['vp','প্রাথমিক ভোল্টেজ (Vp)',50,220,220,10]],
- f:(p,t)=>{const Vs=(p.ns/p.np)*p.vp;
- tx('প্রাথমিক ভোল্টেজ Vp = '+p.vp+' V',100,100,col.ink);
- tx('গৌণ ভোল্টেজ Vs = '+Vs.toFixed(1)+' V',100,150,col.ac);
- tx(p.ns>p.np?'স্টেপ-আপ (উচ্চধাপী) ট্রান্সফরমার':'স্টেপ-ডাউন (নিচধাপী) ট্রান্সফরমার',100,220,col.am);}});
+sim({t:'বৈদ্যুতিক জেনারেটর',c:[['N','পাকসংখ্যা',1,50,20,1],['B','চৌম্বকক্ষেত্র (T)',.1,2,1,.1],['w','কৌণিক বেগ (রেডিয়ান/সে)',1,10,4,.5]],
+ f:(p,t)=>{const E=p.N*p.B*.05*p.w,th=p.w*t,e=E*Math.sin(th);rc(10,100,24,180,col.am);tx('N',22,196,'#000','center');rc(226,100,24,180,col.ink);tx('S',238,196,col.bg,'center');[150,190,230].forEach(y=>ar(40,y,215,y,col.ln));
+ ln(130+60*Math.sin(th),190-60*Math.cos(th),130-60*Math.sin(th),190+60*Math.cos(th),col.ac,7);ln(280,190,620,190,col.ln,1);g.beginPath();g.strokeStyle=col.am;g.lineWidth=3;
+ for(let x=280;x<=620;x+=3)g[x>280?'lineTo':'moveTo'](x,190-110*(E/50)*Math.sin(p.w*(t-(620-x)/60)));g.stroke();ci(620,190-110*(E/50)*Math.sin(th),5,col.ink);
+ tx('তড়িৎচালক বল = '+e.toFixed(1)+' V',280,26,col.ac);tx('সর্বোচ্চ emf = N·B·A·ω = '+E.toFixed(1)+' V',280,52);tx('কুণ্ডলী ঘুরলে ফ্লাক্স বদলায়, পরিবর্তী emf তৈরি হয়',16,360)}});
+
+sim({t:'ট্রান্সফরমার',c:[['Vp','প্রাথমিক ভোল্টেজ (V)',10,240,220,10],['Np','প্রাথমিক পাকসংখ্যা',50,500,200,10],['Ns','মাধ্যমিক পাকসংখ্যা',20,1000,100,10],['Rl','লোড রোধ (Ω)',10,500,100,10]],
+ f:(p,t)=>{const Vs=p.Vp*p.Ns/p.Np,Is=Vs/p.Rl,Ip=Is*p.Ns/p.Np,M=Math.max(p.Vp,Vs),n1=Math.min(20,Math.round(p.Np/25)),n2=Math.min(30,Math.round(p.Ns/25));
+ g.beginPath();g.rect(190,80,260,180);g.rect(230,120,180,100);g.fillStyle=col.ln;g.fill('evenodd');g.strokeStyle=col.ink;g.lineWidth=2;g.stroke();
+ for(let i=0;i<n1;i++)ln(194,124+92*(i+.5)/n1,226,124+92*(i+.5)/n1,col.am,3);for(let i=0;i<n2;i++)ln(414,124+92*(i+.5)/n2,446,124+92*(i+.5)/n2,col.ac,3);
+ g.beginPath();g.strokeStyle=col.ink;g.lineWidth=2;g.arc(80,170,22,0,7);g.stroke();tx('~',80,180,col.ink,'center');ln(102,170,190,170);ln(450,170,548,170);ci(570,170,22,col.am);tx('লোড',570,214,col.ink,'center');
+ rc(120,272,10,10,col.am);tx('প্রাথমিক Np = '+p.Np,136,282);rc(400,272,10,10,col.ac);tx('মাধ্যমিক Ns = '+p.Ns,416,282);
+ [[p.Vp,col.am],[Vs,col.ac]].forEach(([V,k])=>{g.beginPath();g.strokeStyle=k;g.lineWidth=2.5;for(let x=40;x<=600;x+=4)g[x>40?'lineTo':'moveTo'](x,335-30*V/M*Math.sin(2*PI*(x/160-t)));g.stroke()});
+ tx('Vs = Vp × Ns/Np = '+Vs.toFixed(1)+' V',16,22,col.ac);tx(p.Ns>p.Np?'ঊর্ধ্বধাপ ট্রান্সফরমার: ভোল্টেজ বাড়ে, প্রবাহ কমে':p.Ns<p.Np?'নিম্নধাপ ট্রান্সফরমার: ভোল্টেজ কমে, প্রবাহ বাড়ে':'ভোল্টেজ অপরিবর্তিত',16,44);tx('Is = '+Is.toFixed(2)+' A, Ip = '+Ip.toFixed(2)+' A (আদর্শ: Vp·Ip = Vs·Is)',16,66)}});
 </script></body></html>

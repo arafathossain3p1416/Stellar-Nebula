@@ -1,14 +1,19 @@
 <!DOCTYPE html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>পদার্থবিজ্ঞান ল্যাব</title>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body>
-<aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
+<aside><h1><a href="index.html"><button class="back-btn" onclick="location.href='index.html'">⬅ হোম পেজ</button>
+</a></h1><nav id="nav"></nav></aside>
 <main><h1 class="pg">পদার্থবিজ্ঞান ল্যাব</h1><p>নবম–দশম শ্রেণির প্রতিটি অধ্যায়ের সিমুলেশন। স্লাইডার বা মাউস/আঙুল দিয়ে মান বদলে নিজে পরীক্ষা করুন।</p><ul class="idx" id="list"></ul></main>
 <script src="common.js"></script>
 <script>$('#nav').innerHTML=navHTML(0);
 $('#list').innerHTML=CHS.map((c,i)=>DONE.includes(i+1)?`<li><a href="ch${pad(i+1)}.html">অধ্যায় ${i+1}: ${c}</a></li>`:`<li><span>অধ্যায় ${i+1}: ${c} (শীঘ্রই)</span></li>`).join('');</script>
 <footer>
-        <p>&copy; 2026 <span>Stellar Nebula</span> | All Rights Reserved.</p>
-        <p style="margin-top: 5px; font-size: 0.85rem;">Developed & Created with ❤️ by <span>Arafat Hossain</span></p>
-    </footer>
+    <p>&copy; 2026 <a href="about.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Stellar Nebula</a> | All Rights Reserved.</p>
+    <p style="margin-top: 5px; font-size: 0.85rem;">
+        Developed & Created with ❤️ by 
+        <a href="author.html" style="color: #38bdf8; text-decoration: underline; cursor: pointer; font-weight: 600;">Arafat Hossain</a>
+    </p>
+</footer>
+</footer>
 
 </body>
 

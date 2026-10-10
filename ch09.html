@@ -3,6 +3,7 @@
 <aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
 <main><h1 class="pg">অধ্যায় ৯: আলোর প্রতিসরণ</h1><div id="sims"></div></main>
 <script src="common.js"></script>
+<script src="info.js"></script>
 <script>
 $('#nav').innerHTML=navHTML(9);
 const drawLens=(X,Y,neg)=>{g.beginPath();g.strokeStyle=col.ink;g.lineWidth=3;if(!neg)g.ellipse(X,Y,12,95,0,0,7);else{g.moveTo(X-14,Y-95);g.quadraticCurveTo(X+4,Y,X-14,Y+95);g.moveTo(X+14,Y-95);g.quadraticCurveTo(X-4,Y,X+14,Y+95)}g.stroke()};
@@ -12,6 +13,38 @@ sim({t:'আলোর প্রতিসরণের রশ্মিচিত্�
  f:p=>{const i=p.th*PI/180,sr=p.n1*Math.sin(i)/p.n2,X=320,Y=190,L=170;g.globalAlpha=Math.min(.4,.1*p.n2);rc(0,Y,640,190,col.ac);g.globalAlpha=1;ln(X,20,X,360,col.ln,1,1);ln(0,Y,640,Y,col.ink,2);
  ar(X-L*Math.sin(i),Y-L*Math.cos(i),X,Y,col.am);g.globalAlpha=sr<=1?.3:1;ln(X,Y,X+L*Math.sin(i),Y-L*Math.cos(i),col.ink,2);g.globalAlpha=1;
  tx('আপতন কোণ i = '+p.th+'°',16,26);if(sr<=1){const r=Math.asin(sr);ar(X,Y,X+L*sr,Y+L*Math.cos(r),col.ac);tx('প্রতিসরণ কোণ r = '+(r*180/PI).toFixed(1)+'°',16,52,col.ac);tx(p.n2>p.n1?'ঘন মাধ্যমে ঢুকে রশ্মি অভিলম্বের দিকে বেঁকেছে':p.n2<p.n1?'হালকা মাধ্যমে রশ্মি অভিলম্ব থেকে দূরে বেঁকেছে':'প্রতিসরাঙ্ক সমান, রশ্মি সোজা চলে',16,78)}else tx('পূর্ণ অভ্যন্তরীণ প্রতিফলন হয়েছে',16,52,col.ac)}});
+
+
+sim({t:'আলোর প্রতিসরণের রশ্মিচিত্র (নিচ থেকে উপরে)',c:[['th','আপতন কোণ (°)',0,89,40,1],['n1','নিচের মাধ্যমের প্রতিসরাঙ্ক',1,2.4,1.5,.05],['n2','উপরের মাধ্যমের প্রতিসরাঙ্ক',1,2.4,1,.05]],
+ dr:m=>({th:Math.min(89,Math.round(Math.atan2(Math.abs(m.x-320),Math.max(m.y-190,1))*180/PI))}),
+ f:p=>{
+  const i=p.th*PI/180, sr=p.n1*Math.sin(i)/p.n2, X=320, Y=190, L=170;
+  
+  // নিচের প্রথম মাধ্যমের ব্যাকগ্রাউন্ড কালার
+  g.globalAlpha=Math.min(.4,.1*p.n1); rc(0,Y,640,190,col.ac); g.globalAlpha=1;
+  
+  // অভিলম্ব ও মাধ্যম বিভেদতল
+  ln(X,20,X,360,col.ln,1,1); ln(0,Y,640,Y,col.ink,2);
+  
+  // নিচ থেকে আপতিত রশ্মি
+  ar(X-L*Math.sin(i),Y+L*Math.cos(i),X,Y,col.am);
+  
+  // আংশিক প্রতিফলিত রশ্মি (নিচের দিকে)
+  g.globalAlpha=sr<=1?.3:1; ln(X,Y,X+L*Math.sin(i),Y+L*Math.cos(i),col.ink,2); g.globalAlpha=1;
+  
+  tx('আপতন কোণ i = '+p.th+'°',16,26);
+  
+  if(sr<=1){
+   const r=Math.asin(sr);
+   // উপরে প্রতিসৃত রশ্মি
+   ar(X,Y,X+L*sr,Y-L*Math.cos(r),col.ac);
+   tx('প্রতিসরণ কোণ r = '+(r*180/PI).toFixed(1)+'°',16,52,col.ac);
+   tx(p.n2>p.n1?'ঘন মাধ্যমে ঢুকে রশ্মি অভিলম্বের দিকে বেঁকেছে':p.n2<p.n1?'হালকা মাধ্যমে রশ্মি অভিলম্ব থেকে দূরে বেঁকেছে':'প্রতিসরাঙ্ক সমান, রশ্মি সোজা চলে',16,78);
+  } else {
+   tx('পূর্ণ অভ্যন্তরীণ প্রতিফলন হয়েছে (নিচের মাধ্যমে ফেরত গেছে)',16,52,col.ac);
+  }
+ }
+});
 
 const lens=neg=>({c:[['f','ফোকাস দূরত্ব',40,150,neg?80:90,5],['u','বস্তুর দূরত্ব',30,290,neg?150:200,1]],dr:m=>({u:cl(Math.round(320-m.x),30,290)}),
  f:p=>{const X=320,Y=200,h=40,F=neg?-p.f:p.f,u=Math.abs(p.u-F)<4?F+4:p.u,v=1/(1/F-1/u),Xo=X-u,Xi=X+v,yi=Y+h*v/u,real=v>0;ln(10,Y,630,Y,col.ln,1);drawLens(X,Y,neg);

@@ -3,37 +3,53 @@
 <aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
 <main><h1 class="pg">অধ্যায় ১৩: তেজস্ক্রিয়তা ও ইলেকট্রনিক্স</h1><div id="sims"></div></main>
 <script src="common.js"></script>
+<script src="info.js"></script>
 <script>
 $('#nav').innerHTML=navHTML(13);
+const EL=['হাইড্রোজেন','হিলিয়াম','লিথিয়াম','বেরিলিয়াম','বোরন','কার্বন','নাইট্রোজেন','অক্সিজেন','ফ্লোরিন','নিয়ন','সোডিয়াম','ম্যাগনেসিয়াম','অ্যালুমিনিয়াম','সিলিকন','ফসফরাস','সালফার','ক্লোরিন','আর্গন','পটাসিয়াম','ক্যালসিয়াম'];
 
-sim({t:'পরমাণুর নিউক্লিয়াসের মডেল ও বিকিরণ (আলফা, বিটা, গামা)',c:[['t','সময় (সে)',0,10,0,1]],
- f:(p,t)=>{const cx=300,cy=180;
- ci(cx,cy,35,col.ac);tx('নিউক্লিয়াস',cx,cy+5,col.ink,'center');
- const x1=cx+t*30, y1=cy-t*15; ci(x1,y1,6,'#ef4444'); tx('আলফা (α)',x1+15,y1,'#ef4444');
- const x2=cx+t*45, y2=cy+t*10; ci(x2,y2,4,'#38bdf8'); tx('বিটা (β)',x2+15,y2,'#38bdf8');
- tx('গামা (γ) তরঙ্গ',cx+t*50,cy+40,col.am);}});
+sim({t:'পরমাণুর নিউক্লিয়াসের মডেল',c:[['Z','প্রোটন সংখ্যা Z',1,20,6,1],['N','নিউট্রন সংখ্যা',0,24,6,1]],
+ f:(p,t)=>{const Z=p.Z,A=Z+p.N,cx=190,cy=190,sh=[];let rem=Z;[2,8,8,2].forEach(c=>{const k=Math.min(c,rem);sh.push(k);rem-=k});
+ sh.forEach((k,s)=>{if(!k)return;const r=55+s*37;g.globalAlpha=.4;g.beginPath();g.strokeStyle=col.ink;g.lineWidth=1;g.arc(cx,cy,r,0,7);g.stroke();g.globalAlpha=1;for(let i=0;i<k;i++){const a=2*PI*i/k+t*(.8-s*.15);ci(cx+r*Math.cos(a),cy+r*Math.sin(a),4,col.ac)}});
+ for(let i=0;i<A;i++){const r=4.6*Math.sqrt(i+.5),a=i*2.4,isP=Math.floor((i+1)*Z/A)>Math.floor(i*Z/A);ci(cx+r*Math.cos(a),cy+r*Math.sin(a),5,isP?col.am:col.ink)}
+ ci(385,50,6,col.am);tx('প্রোটন (+)',400,56);ci(385,78,6,col.ink);tx('নিউট্রন (০)',400,84);ci(385,106,4,col.ac);tx('ইলেকট্রন (−)',400,112);
+ tx('মৌল: '+EL[Z-1],376,160,col.ac);tx('ক্রমাঙ্ক Z = '+Z,376,188);tx('ভরসংখ্যা A = Z + N = '+A,376,216);tx('ইলেকট্রন = '+Z+' (শেল: '+sh.filter(x=>x).join(', ')+')',376,244);tx('একই Z, ভিন্ন N = আইসোটোপ',376,290)}});
 
-sim({t:'তেজস্ক্রিয় ক্ষয় ও অর্ধায়ুর গ্রাফ',c:[['h','অর্ধায়ু (বছর)',1,10,3,1]],
- f:(p,t)=>{const H=p.h, T=Math.min(t%12,10), N=100*Math.pow(0.5, T/H);
- ln(60,320,580,320,col.ink,1);ln(60,120,60,320,col.ink,1);
- rc(60+T*50,320-N*2,8,N*2,col.ac);
- tx('অবশিষ্ট পরমাণু N = '+N.toFixed(1)+'%',100,80,col.ac);
- tx('সময় t = '+T.toFixed(1)+' বছর',100,110,col.ink);}});
+sim({t:'আলফা, বিটা ও গামা বিকিরণ',c:[['pa','কাগজের পাতা (০ = নেই, ১ = আছে)',0,1,0,1],['al','অ্যালুমিনিয়াম পাত',0,1,0,1],['pb','সিসার পুরু পাত',0,1,0,1],['mg','চৌম্বক ক্ষেত্র',0,1,0,1]],
+ f:(p,t)=>{const B=[[240,6,'কাগজ',p.pa,340],[330,12,'অ্যালুমিনিয়াম',p.al,362],[420,26,'সিসা',p.pb,340]];rc(30,100,40,170,col.ln);tx('উৎস',50,292,col.ink,'center');rc(556,70,8,250,col.ln);
+ B.forEach(([x,w,n,on,ty])=>{g.globalAlpha=on?1:.12;rc(x-w/2,70,w,250,col.ink);g.globalAlpha=1;tx(n,x,ty,col.ink,'center')});
+ if(p.mg==1){g.globalAlpha=.5;for(let x=100;x<=540;x+=60)for(let y=90;y<=300;y+=50)tx('×',x,y,col.ln,'center');g.globalAlpha=1}
+ [['α',120,col.am,.00012,[0,1,2]],['β',190,col.ac,-.0004,[1,2]],['γ',260,col.ink,0,[2]]].forEach(([nm,y0,k,c,bl])=>{const cc=p.mg==1?c:0,yy=x=>y0+cc*(x-60)**2;let st=560,hit=false;for(const i of bl)if(B[i][3]==1){st=B[i][0];hit=true;break}
+  g.beginPath();g.strokeStyle=k;g.lineWidth=1;g.globalAlpha=.4;for(let x=70;x<=st;x+=8)g[x>70?'lineTo':'moveTo'](x,yy(x));g.stroke();g.globalAlpha=1;const L=st-70;for(let j=0;j<Math.floor(L/45);j++){const x=70+((t*140+j*45)%L);ci(x,yy(x),nm=='α'?6:4,k)}
+  tx(nm,76,y0-10,k);if(hit)tx('✕',st-8,yy(st)+5,k);else ci(560,yy(560),8,k)});
+ tx('আলফা (α): কাগজ ও ত্বকে থামে, মোটা, ধীর',16,26);tx('বিটা (β): অ্যালুমিনিয়াম পাতে থামে',16,52);tx('গামা (γ): মোটা সিসায় বাধা পায়, সবচেয়ে ভেদ্য',16,78)}});
 
-sim({t:'অ্যানালগ ও ডিজিটাল সংকেত',c:[['f','কম্পাঙ্ক',1,5,2,1]],
- f:(p,t)=>{const cx=60,cy=180;
- g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;
- for(let x=0;x<500;x+=5) { let y=cy+Math.sin((x+t*20)*0.05)*40; g[x==0?'moveTo':'lineTo'](cx+x,y); }
- g.stroke(); tx('অ্যানালগ সংকেত (Sine Wave)',60,110,col.ac);
- 
- g.beginPath();g.strokeStyle=col.am;g.lineWidth=2;
- for(let x=0;x<500;x+=40) { let hi=(Math.floor((x+t*20)/40)%2===0); g.lineTo(cx+x,cy+100+(hi?-30:10)); g.lineTo(cx+x+40,cy+100+(hi?-30:10)); }
- g.stroke(); tx('ডিজিটাল সংকেত (Square Wave)',60,240,col.am);}});
+sim({t:'তেজস্ক্রিয় ক্ষয়ের মডেল',c:[['T','অর্ধায়ু (সেকেন্ড)',1,5,2,.5],['n','পরমাণুর সংখ্যা',50,200,100,10]],
+ f:(p,t)=>{const T=p.T,n=Math.round(p.n),D=5*T,s=Math.min(t%(D+2),D);let par=0,fl=0;
+ for(let i=0;i<n;i++){const u=((i*37+11)%101+.5)/101,ti=-T*Math.log2(u),x=40+(i%14)*34,y=70+Math.floor(i/14)*20,al=s<ti;par+=al;if(!al&&s-ti<.25){fl++;g.globalAlpha=1-(s-ti)/.25;ci(x,y,6+(s-ti)*40,col.am);g.globalAlpha=1}ci(x,y,6,al?col.am:col.ac)}
+ ci(510,110,6,col.am);tx('মূল পরমাণু',524,116);ci(510,136,6,col.ac);tx('ক্ষয়ের পর',524,142);
+ tx('মূল পরমাণু বাকি: '+par+' / '+n+' ('+(par/n*100).toFixed(0)+'%)',16,26,col.ac);tx('এখন ক্ষয় হচ্ছে: '+fl+' টি, সময় '+s.toFixed(1)+' সে (উজ্জ্বল ঝলক = ক্ষয়)',16,50)}});
 
-sim({t:'ডায়োড ও সেমিকন্ডাক্টরের মডেল (P-N জাংশন)',c:[['v','বায়াস ভোল্টেজ (V)',-3,3,1,.5]],
- f:(p,t)=>{const V=p.v;
- rc(220,150,80,80,col.ac);rc(300,150,80,80,col.am);
- tx('P-টাইপ',260,195,col.ink,'center');tx('N-টাইপ',340,195,col.ink,'center');
- tx('ভোল্টেজ V = '+V+' V',100,80,col.ink);
- tx(V>0?'ফরোয়ার্ড বায়াস (কারেন্ট প্রবাহিত হয়)':'রিভার্স বায়াস (কারেন্ট রোধ করে)',100,110,V>0?col.am:'#ef4444');}});
+sim({t:'অর্ধায়ুর গ্রাফ',c:[['T','অর্ধায়ু (সেকেন্ড)',1,10,4,.5],['N0','প্রাথমিক পরিমাণ (গ্রাম)',20,100,80,10],['tm','সময় t (সেকেন্ড)',0,30,10,.5]],dr:m=>({tm:cl(Math.round((m.x-60)/9)/2,0,30)}),
+ f:p=>{const X=u=>60+u*18,Y=v=>320-2.4*v*(100/100),N=p.N0*Math.pow(2,-p.tm/p.T);ln(60,320,610,320,col.ink,1);ln(60,70,60,320,col.ink,1);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=3;for(let u=0;u<=30;u+=.3)g[u?'lineTo':'moveTo'](X(u),Y(p.N0*Math.pow(2,-u/p.T)));g.stroke();
+ for(let k=1;k<=5;k++){if(k*p.T>30)break;const v=p.N0/Math.pow(2,k);ln(60,Y(v),X(k*p.T),Y(v),col.ln,1,1);ln(X(k*p.T),Y(v),X(k*p.T),320,col.ln,1,1);tx(v.toFixed(1),54,Y(v)+5,col.ink,'right');tx(k*p.T+'',X(k*p.T),340,col.ink,'center')}
+ ln(X(p.tm),Y(N),X(p.tm),320,col.am,1,1);ci(X(p.tm),Y(N),7,col.am);tx('সময় (সে) →',560,360);tx('গ্রাম',20,Y(p.N0)-8);
+ tx('অর্ধায়ু সংখ্যা n = t/T = '+(p.tm/p.T).toFixed(2),16,26,col.ac);tx('অবশিষ্ট N = N₀/2ⁿ = '+N.toFixed(1)+' গ্রাম',16,52)}});
+
+sim({t:'অ্যানালগ ও ডিজিটাল সংকেত',c:[['A','অ্যানালগ বিস্তার',10,50,40,1],['f','অ্যানালগ কম্পাঙ্ক',1,5,2,.5],['bits','ডিজিটাল সংখ্যা (০–২৫৫)',0,255,178,1],['ns','শব্দ (noise)',0,1,0,.05]],
+ f:(p,t)=>{const h=i=>{const v=Math.sin(i*12.9898+7.1)*43758.5453;return v-Math.floor(v)-.5},bin=Math.round(p.bits).toString(2).padStart(8,'0'),sh=Math.floor(t*10),ideal=x=>100-p.A*Math.sin(2*PI*(p.f*(x-40)/560)-t*2);
+ ln(40,100,600,100,col.ln,1);g.beginPath();g.strokeStyle=col.ln;g.lineWidth=1;for(let x=40;x<=600;x+=3)g[x>40?'lineTo':'moveTo'](x,ideal(x));g.stroke();
+ g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;for(let x=40;x<=600;x+=3)g[x>40?'lineTo':'moveTo'](x,ideal(x)+p.A*1.6*p.ns*h(Math.floor(x/3)+sh));g.stroke();
+ const lv=x=>bin[Math.min(7,Math.floor((x-40)/70))]=='1'?270:330;ln(40,300,600,300,col.ln,1,1);g.beginPath();g.strokeStyle=col.am;g.lineWidth=1;g.globalAlpha=.7;for(let x=40;x<=600;x+=3)g[x>40?'lineTo':'moveTo'](x,lv(x)+60*p.ns*h(Math.floor(x/3)+sh+500));g.stroke();g.globalAlpha=1;
+ g.beginPath();g.strokeStyle=col.ac;g.lineWidth=3;for(let i=0;i<8;i++){const y=bin[i]=='1'?270:330,x=40+70*i;if(i)g.lineTo(x,y);else g.moveTo(x,y);g.lineTo(x+70,y)}g.stroke();
+ for(let i=0;i<8;i++)tx(bin[i],75+70*i,358,col.ink,'center');
+ tx('অ্যানালগ: মান নিরবচ্ছিন্নভাবে বদলায়',16,26,col.ac);tx('ডিজিটাল: শুধু ০ ও ১ ('+bin+')',16,250,col.ac);tx('শব্দ বাড়লে অ্যানালগের আকৃতি নষ্ট হয়, ডিজিটাল ০/১ ঠিক চেনা যায়',16,205)}});
+
+sim({t:'ডায়োড ও সেমিকন্ডাক্টরের মডেল',c:[['V','বায়াস ভোল্টেজ (V)',-5,5,1.5,.1]],
+ f:(p,t)=>{const V=p.V,Ic=v=>v>0?Math.min(20,.002*(Math.exp(v/.1)-1)):-.02,I=Ic(V),on=V>.7,jx=170,w=V>0?Math.max(14,70-V*40):Math.min(130,70+Math.abs(V)*12);
+ g.globalAlpha=.25;rc(40,110,130,140,col.am);rc(170,110,130,140,col.ac);g.globalAlpha=1;g.globalAlpha=.9;rc(jx-w/2,110,w,140,col.ln);g.globalAlpha=1;tx('p-টাইপ',105,100,col.ink,'center');tx('n-টাইপ',235,100,col.ink,'center');tx('ক্ষয়স্তর',jx,272,col.ink,'center');
+ for(let i=0;i<9;i++){const y=125+((i*53)%100)/100*110,hb=50+((i*37)%100)/100*(jx-w/2-60),eb=jx+w/2+8+((i*29)%100)/100*(292-jx-w/2-16),ph=(t*.5+i/9)%1;
+  const hx=on?hb+(jx+25-hb)*ph:hb+2*Math.sin(t*3+i),ex=on?eb+(jx-25-eb)*ph:eb+2*Math.sin(t*3+i);g.beginPath();g.strokeStyle=col.am;g.lineWidth=2;g.arc(hx,y,5,0,7);g.stroke();ci(ex,y+8,5,col.ac)}
+ ln(500,300,620,300,col.ink,1);ln(380,300,500,300,col.ink,1);ln(500,90,500,330,col.ink,1);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=2;for(let v=-5;v<=5.01;v+=.1)g[v>-5?'lineTo':'moveTo'](500+v*24,300-Ic(v)*10);g.stroke();ci(500+V*24,300-I*10,6,col.am);tx('I (mA)',506,86);tx('V →',590,322);
+ tx(on?'অগ্র-বায়াস: ক্ষয়স্তর সরু, বিদ্যুৎ চলে':V>0?'অগ্র-বায়াস কিন্তু ভোল্টেজ ০.৭ V এর কম: বিদ্যুৎ প্রায় নেই':'বিপরীত-বায়াস: ক্ষয়স্তর চওড়া, বিদ্যুৎ প্রায় নেই',16,26,col.ac);tx('V = '+V.toFixed(1)+' V, প্রবাহ I = '+I.toFixed(2)+' mA',16,52);tx('ডায়োড শুধু একদিকে বিদ্যুৎ চলতে দেয়',16,360)}});
 </script></body></html>

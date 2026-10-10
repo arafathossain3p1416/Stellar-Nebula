@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ডেভেলপার পরিচিতি - আরাফাত হোসেন</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        header { background: #1e293b; padding: 15px 30px; display: flex; align-items: center; border-bottom: 1px solid #334155; gap: 20px; }
+        .back-btn { background: #e11d48; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; transition: 0.2s; }
+        .back-btn:hover { background: #be123c; }
+        header h1 { color: #38bdf8; font-size: 1.5rem; }
+
+        .container { max-width: 800px; width: 90%; margin: 50px auto; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 40px; display: flex; gap: 40px; align-items: center; flex-wrap: wrap; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        
+        .author-img-box { flex: 1; min-width: 220px; text-align: center; }
+        .author-img { width: 200px; height: 200px; object-fit: cover; border-radius: 50%; border: 4px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); background: #0f172a; }
+        
+        .author-info { flex: 2; min-width: 260px; }
+        .author-info h2 { color: #f1f5f9; font-size: 2rem; margin-bottom: 8px; }
+        .author-info h4 { color: #38bdf8; font-size: 1.1rem; margin-bottom: 20px; font-weight: 500; }
+        
+        .contact-list { list-style: none; margin-top: 15px; }
+        .contact-list li { margin-bottom: 10px; color: #cbd5e1; font-size: 1rem; display: flex; align-items: center; gap: 10px; }
+        .contact-list a { color: #38bdf8; text-decoration: none; }
+        .contact-list a:hover { text-decoration: underline; }
+
+        footer { width: 100%; background: #1e293b; border-top: 1px solid #334155; text-align: center; padding: 20px; color: #94a3b8; font-size: 0.95rem; }
+        footer a { color: #38bdf8; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="back-btn" onclick="location.href='index.html'">⬅ হোম পেজ</button>
+        <h1>ডেভেলপার পরিচিতি</h1>
+    </header>
+
+    <div class="container">
+        <div class="author-img-box">
+            <img src="author.jpg" alt="Arafat Hossain" class="author-img" onerror="this.src='https://via.placeholder.200/38bdf8/0b0f19?text=Arafat+Hossain'">
+        </div>
+        <div class="author-info">
+            <h2>আরাফাত হোসেন</h2>
+            <h4>ডেভেলপার - Stellar Nebula</h4>
+            
+            <ul class="contact-list">
+                <li>🎓 <strong>শিক্ষা:</strong> B.Sc. & M.Sc. in Mathematics, Comilla University</li>
+                <li>📧 <strong>ইমেইল:</strong> <a href="arafathossainsami@gmail.com">arafathossainsami@gmail.com</a></li>
+                <li>📞 <strong>মোবাইল:</strong> <a href="tel:+8801319278417">+8801319278417</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <a href="about.html">Stellar Nebula</a> | All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Nebula সম্পর্কে</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        header { background: #1e293b; padding: 15px 30px; display: flex; align-items: center; border-bottom: 1px solid #334155; gap: 20px; }
+        .back-btn { background: #e11d48; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; transition: 0.2s; }
+        .back-btn:hover { background: #be123c; }
+        header h1 { color: #38bdf8; font-size: 1.5rem; }
+
+        .container { max-width: 900px; width: 90%; margin: 40px auto; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .container h2 { color: #38bdf8; font-size: 2rem; margin-bottom: 20px; text-align: center; }
+        .container p { color: #cbd5e1; line-height: 1.8; font-size: 1.05rem; margin-bottom: 20px; text-align: justify; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .feature-card { background: #0f172a; border: 1px solid #334155; padding: 25px; border-radius: 12px; text-align: center; }
+        .feature-card h3 { color: #f1f5f9; margin-bottom: 10px; font-size: 1.2rem; }
+        .feature-card p { font-size: 0.95rem; text-align: center; margin: 0; color: #94a3b8; }
+
+        footer { width: 100%; background: #1e293b; border-top: 1px solid #334155; text-align: center; padding: 20px; color: #94a3b8; font-size: 0.95rem; }
+        footer a { color: #38bdf8; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="back-btn" onclick="location.href='index.html'">⬅ হোম পেজ</button>
+        <h1>Stellar Nebula সম্পর্কে</h1>
+    </header>
+
+    <div class="container">
+        <h2>Stellar Nebula</h2>
+        <p><strong>Stellar Nebula</strong> একটি প্রযুক্তি ও শিক্ষাভিত্তিক প্ল্যাটফর্ম, যা বিজ্ঞান ও গণিতকে সহজ ও জনপ্রিয় করার লক্ষ্যে কাজ করে। বিভিন্ন বৈজ্ঞানিক ও গাণিতিক বিষয়গুলোকে ব্রাউজার-ভিত্তিক ইন্টারেক্টিভ সিমুলেশন ও সফটওয়্যারের মাধ্যমে উপস্থাপন করা এর মূল লক্ষ্য, যা বাংলাদেশের সকল পর্যায়ের শিক্ষার্থীদের জন্য কার্যকর শেখার মাধ্যম হিসেবে তৈরি করা হচ্ছে।</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🧪 বিজ্ঞান ও গণিত সিমুলেশন</h3>
+                <p>পদার্থবিজ্ঞান, রসায়ন ও গণিতের জটিল বিষয়গুলোকে রিয়েল-টাইম ক্যানভাস ও সিমুলেশনে রূপান্তর।</p>
+            </div>
+            <div class="feature-card">
+                <h3>💻 সফটওয়্যার ও ইন্টারঅ্যাকশন</h3>
+                <p>ইন্টারেক্টিভ ভিজ্যুয়াল টুল ও সফটওয়্যার তৈরির মাধ্যমে শেখার অভিজ্ঞতাকে সহজতর করা।</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 সার্বজনীন শিক্ষা</h3>
+                <p>বাংলাদেশের সকল স্তরের শিক্ষার্থীবৃন্দের জন্য উন্মুক্ত ও ব্যবহারবান্ধব ডিজিটাল ল্যাব।</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <a href="about.html">Stellar Nebula</a> | All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

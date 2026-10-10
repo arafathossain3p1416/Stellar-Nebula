@@ -3,13 +3,14 @@
 <aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
 <main><h1 class="pg">অধ্যায় ৭: তরঙ্গ ও শব্দ</h1><div id="sims"></div></main>
 <script src="common.js"></script>
+<script src="info.js"></script>
 <script>
 $('#nav').innerHTML=navHTML(7);
 const fc=(l,s)=>((l*s-30)%l+l)%l+30; // প্রথম শীর্ষের x
 
 sim({t:'অনুপ্রস্থ তরঙ্গ',c:[['A','বিস্তার (সেমি)',1,8,5,.5],['l','তরঙ্গদৈর্ঘ্য (সেমি)',6,30,16,1],['f','কম্পাঙ্ক (Hz)',.2,3,1,.1]],
  f:(p,t)=>{const A=p.A*10,L=p.l*10,y=x=>190-A*Math.sin(2*PI*(x/L-p.f*t));ln(20,190,620,190,col.ln,1);g.beginPath();g.strokeStyle=col.ac;g.lineWidth=3;for(let x=20;x<=620;x+=4)g[x>20?'lineTo':'moveTo'](x,y(x));g.stroke();
- for(let x=20;x<=620;x+=30)ci(x,y(x),5,col.am);ln(320,190-A,320,190+A,col.ink,1,1);ci(320,y(320),9,col.ink);const c=fc(L,p.f*t+.25);if(c<600)tx('শীর্ষ',c,190-A-12,col.ink,'center');if(c+L/2<600)tx('পাদ',c+L/2,190+A+24,col.ink,'center');
+ for(let x=20;x<=620;x+=30)ci(x,y(x),5,col.am);ln(320,190-A,320,190+A,col.ink,1,1);ci(320,y(320),9,col.ink);const c=fc(L,p.f*t+.25);if(c<600)tx('শীর্ষবিন্দু ',c,190-A-12,col.ink,'center');if(c+L/2<600)tx('পাদবিন্দু',c+L/2,190+A+24,col.ink,'center');
  tx('কণা ওপর-নিচে কাঁপে, তরঙ্গ ডানে এগোয় (কালো কণাটি দেখুন)',16,26,col.ac);tx('বেগ v = f × λ = '+(p.f*p.l).toFixed(1)+' সেমি/সে',16,52)}});
 
 sim({t:'অনুদৈর্ঘ্য তরঙ্গ',c:[['A','কম্পনের বিস্তার',2,12,8,1],['l','তরঙ্গদৈর্ঘ্য',100,300,160,10],['f','কম্পাঙ্ক (Hz)',.2,2,.8,.1]],

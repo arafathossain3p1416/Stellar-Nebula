@@ -3,6 +3,7 @@
 <aside><h1><a href="index.html">পদার্থবিজ্ঞান ল্যাব</a></h1><nav id="nav"></nav></aside>
 <main><h1 class="pg">অধ্যায় ৮: আলোর প্রতিফলন</h1><div id="sims"></div></main>
 <script src="common.js"></script>
+<script src="info.js"></script>
 <script>
 $('#nav').innerHTML=navHTML(8);
 
@@ -11,6 +12,7 @@ sim({t:'আলোর প্রতিফলনের সূত্র',c:[['i','�
  ar(X-L*Math.sin(i),Y-L*Math.cos(i),X,Y,col.am);ar(X,Y,X+L*Math.sin(i),Y-L*Math.cos(i),col.ac);
  g.lineWidth=2;g.beginPath();g.strokeStyle=col.am;g.arc(X,Y,70,-PI/2-i,-PI/2);g.stroke();g.beginPath();g.strokeStyle=col.ac;g.arc(X,Y,90,-PI/2,-PI/2+i);g.stroke();tx('অভিলম্ব',X+6,Y-215);
  tx('আপতন কোণ i = '+p.i+'°',16,26,col.am);tx('প্রতিফলন কোণ r = '+p.i+'°',16,52,col.ac);tx('সূত্র: i = r, আর আপতিত রশ্মি, প্রতিফলিত রশ্মি ও অভিলম্ব একই তলে',16,78)}});
+
 
 sim({t:'সমতল দর্পণে প্রতিবিম্ব',c:[['u','বস্তুর দূরত্ব',30,350,150,1],['h','বস্তুর উচ্চতা',20,80,50,1]],dr:m=>({u:cl(Math.round(400-m.x),30,350)}),
  f:p=>{const X=400,Y=260,u=p.u,h=p.h,Xo=X-u,Xi=X+u,e1=Math.hypot(u,h),e2=Math.hypot(u,h/2);ln(X,40,X,340,col.ink,4);for(let y=50;y<340;y+=16)ln(X,y,X+10,y+12,col.ink,1);ln(10,Y,630,Y,col.ln,1);
@@ -37,6 +39,5 @@ sim({t:'দর্পণের প্রধান ফোকাস ও বক্�
  f:p=>{const X=320,Y=200,R=2*p.f,Xc=X-R;ln(10,Y,630,Y,col.ln,1);g.beginPath();g.strokeStyle=col.ink;g.lineWidth=4;g.arc(Xc,Y,R,-.7,.7);g.stroke();
  for(let i=-p.n;i<=p.n;i++){const dy=Math.min(p.d*i/p.n,.9*R),xh=Xc+Math.sqrt(R*R-dy*dy),xr=Xc+R/(2*Math.sqrt(1-(dy/R)**2));ln(10,Y-dy,xh,Y-dy,col.am);ln(xh,Y-dy,xh+1.4*(xr-xh),Y-dy+1.4*dy,col.ac)}
  ci(X-p.f,Y,5,col.am);tx('F',X-p.f,Y+24,col.ink,'center');ci(Xc,Y,5,col.ink);tx('C',Xc,Y+24,col.ink,'center');tx('প্রধান ফোকাস F, বক্রতার কেন্দ্র C; f = R/2 = '+p.f,16,26);tx('সমান্তরাল রশ্মি প্রতিফলনের পর F বিন্দুর দিকে যায়',16,52,col.ac)}});
-
 
 </script></body></html>
